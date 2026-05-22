@@ -1,0 +1,750 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CCOS — Creative Confidence Operating System</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:         #0e0e0c;
+  --bg2:        #161614;
+  --bg3:        #1e1e1b;
+  --bg4:        #262622;
+  --border:     rgba(255,255,255,0.07);
+  --border2:    rgba(255,255,255,0.13);
+  --text:       #f0efe8;
+  --text2:      #8a897f;
+  --text3:      #56554d;
+  --teal:       #2dd6a0;
+  --teal-dim:   #1a7a5c;
+  --teal-bg:    rgba(45,214,160,0.08);
+  --amber:      #e8a935;
+  --amber-bg:   rgba(232,169,53,0.08);
+  --red:        #e05555;
+  --red-bg:     rgba(224,85,85,0.08);
+  --purple:     #a78bfa;
+  --purple-bg:  rgba(167,139,250,0.08);
+  --mono:       'DM Mono', monospace;
+  --sans:       'DM Sans', sans-serif;
+  --radius:     10px;
+  --radius-sm:  6px;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: var(--sans);
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  font-size: 14px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── Layout ─────────────────────────────────────────────────────────── */
+.shell { max-width: 960px; margin: 0 auto; padding: 0 24px 80px; }
+.top-bar {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 20px 0; border-bottom: 0.5px solid var(--border);
+  margin-bottom: 40px;
+}
+.wordmark { font-family: var(--mono); font-size: 13px; font-weight: 500; letter-spacing: .05em; }
+.wordmark span { color: var(--teal); }
+.version-tag {
+  font-family: var(--mono); font-size: 11px; color: var(--text3);
+  border: 0.5px solid var(--border2); padding: 3px 10px; border-radius: 20px;
+}
+
+.hero { margin-bottom: 48px; }
+.hero-eyebrow {
+  font-family: var(--mono); font-size: 11px; font-weight: 500;
+  letter-spacing: .1em; text-transform: uppercase;
+  color: var(--teal); margin-bottom: 14px;
+}
+.hero h1 { font-size: 36px; font-weight: 300; line-height: 1.2; margin-bottom: 14px; letter-spacing: -.01em; }
+.hero h1 strong { font-weight: 600; }
+.hero p { font-size: 14px; color: var(--text2); max-width: 560px; line-height: 1.7; }
+
+/* ── Two-col layout ─────────────────────────────────────────────────── */
+.cols { display: grid; grid-template-columns: 380px 1fr; gap: 24px; align-items: start; }
+@media (max-width: 780px) { .cols { grid-template-columns: 1fr; } }
+
+/* ── Panel ──────────────────────────────────────────────────────────── */
+.panel {
+  background: var(--bg2); border: 0.5px solid var(--border);
+  border-radius: var(--radius); overflow: hidden;
+}
+.panel-header {
+  padding: 14px 18px; border-bottom: 0.5px solid var(--border);
+  display: flex; align-items: center; gap: 8px;
+}
+.panel-title { font-family: var(--mono); font-size: 11px; font-weight: 500;
+               letter-spacing: .08em; text-transform: uppercase; color: var(--text2); }
+.panel-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--teal); flex-shrink: 0; }
+.panel-body { padding: 18px; }
+
+/* ── Form elements ──────────────────────────────────────────────────── */
+.field { margin-bottom: 16px; }
+.field label {
+  display: block; font-size: 11px; font-weight: 500; letter-spacing: .05em;
+  text-transform: uppercase; color: var(--text3); margin-bottom: 6px;
+}
+select, input[type=text] {
+  width: 100%; background: var(--bg3); border: 0.5px solid var(--border2);
+  border-radius: var(--radius-sm); padding: 9px 12px; color: var(--text);
+  font-family: var(--sans); font-size: 13px; outline: none;
+  transition: border-color .15s;
+  appearance: none; -webkit-appearance: none;
+}
+select { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23565550'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: right 12px center; padding-right: 32px; }
+select:focus, input[type=text]:focus { border-color: var(--teal); }
+textarea {
+  width: 100%; background: var(--bg3); border: 0.5px solid var(--border2);
+  border-radius: var(--radius-sm); padding: 9px 12px; color: var(--text);
+  font-family: var(--sans); font-size: 13px; outline: none; resize: vertical;
+  min-height: 72px; transition: border-color .15s;
+}
+textarea:focus { border-color: var(--teal); }
+
+/* ── Upload zone ────────────────────────────────────────────────────── */
+.upload-zone {
+  border: 1px dashed var(--border2); border-radius: var(--radius);
+  padding: 28px; text-align: center; cursor: pointer; transition: all .2s;
+  position: relative; background: var(--bg3);
+}
+.upload-zone:hover, .upload-zone.drag { border-color: var(--teal); background: var(--teal-bg); }
+.upload-zone input { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
+.upload-icon { font-size: 28px; margin-bottom: 8px; opacity: .4; }
+.upload-zone p { font-size: 13px; color: var(--text2); }
+.upload-zone small { font-size: 11px; color: var(--text3); }
+.preview-wrap { position: relative; }
+.preview-wrap img { width: 100%; border-radius: var(--radius-sm); display: block; }
+.preview-clear {
+  position: absolute; top: 8px; right: 8px; background: rgba(0,0,0,.7);
+  border: none; color: var(--text); border-radius: 50%; width: 24px; height: 24px;
+  cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center;
+}
+
+/* ── API key input ──────────────────────────────────────────────────── */
+.key-row { display: flex; gap: 8px; }
+.key-row input { flex: 1; font-family: var(--mono); font-size: 12px; }
+.key-toggle {
+  background: var(--bg4); border: 0.5px solid var(--border2); color: var(--text2);
+  border-radius: var(--radius-sm); padding: 0 12px; cursor: pointer; font-size: 12px;
+  white-space: nowrap; transition: .15s;
+}
+.key-toggle:hover { border-color: var(--border2); color: var(--text); }
+
+/* ── Run button ─────────────────────────────────────────────────────── */
+.run-btn {
+  width: 100%; padding: 12px; background: var(--teal); border: none;
+  border-radius: var(--radius-sm); color: #0a2e22; font-family: var(--sans);
+  font-size: 14px; font-weight: 600; cursor: pointer; transition: all .2s;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  letter-spacing: .01em; margin-top: 4px;
+}
+.run-btn:hover:not(:disabled) { background: #3de8b0; }
+.run-btn:disabled { opacity: .4; cursor: not-allowed; }
+.run-btn .spinner { width: 14px; height: 14px; border: 2px solid rgba(0,40,30,.3);
+  border-top-color: #0a2e22; border-radius: 50%; animation: spin .7s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ── Results panel ──────────────────────────────────────────────────── */
+.result-empty {
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  min-height: 400px; color: var(--text3); text-align: center; gap: 12px;
+}
+.result-empty .idle-mark {
+  font-family: var(--mono); font-size: 48px; opacity: .15;
+}
+.result-empty p { font-size: 13px; }
+
+/* ── Score ring ─────────────────────────────────────────────────────── */
+.score-hero {
+  display: flex; align-items: center; gap: 24px;
+  padding: 20px 18px; border-bottom: 0.5px solid var(--border);
+}
+.ring-wrap { position: relative; width: 88px; height: 88px; flex-shrink: 0; }
+.ring-wrap svg { transform: rotate(-90deg); }
+.ring-center {
+  position: absolute; inset: 0; display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+}
+.ring-num { font-size: 26px; font-weight: 600; line-height: 1; }
+.ring-denom { font-size: 10px; color: var(--text3); font-family: var(--mono); margin-top: 1px; }
+.score-meta { flex: 1; }
+.score-label {
+  font-size: 18px; font-weight: 600; letter-spacing: -.01em; margin-bottom: 4px;
+}
+.score-action { font-size: 12px; color: var(--text2); margin-bottom: 8px; }
+.score-tags { display: flex; gap: 6px; flex-wrap: wrap; }
+.tag {
+  font-family: var(--mono); font-size: 10px; padding: 3px 8px;
+  border-radius: 4px; border: 0.5px solid;
+}
+.tag-platform { border-color: var(--border2); color: var(--text2); }
+.tag-intent   { border-color: var(--teal-dim); color: var(--teal); }
+.tag-warn     { border-color: rgba(232,169,53,.4); color: var(--amber); background: var(--amber-bg); }
+
+/* ── Consensus warning ──────────────────────────────────────────────── */
+.consensus-warn {
+  margin: 0 18px 0; padding: 12px 14px;
+  background: var(--amber-bg); border: 0.5px solid rgba(232,169,53,.3);
+  border-radius: var(--radius-sm); font-size: 12px; color: var(--amber);
+  display: flex; gap: 10px; align-items: flex-start;
+}
+.consensus-warn strong { display: block; margin-bottom: 3px; }
+
+/* ── Persona tabs ───────────────────────────────────────────────────── */
+.persona-tabs {
+  display: flex; border-bottom: 0.5px solid var(--border);
+  padding: 0 18px;
+}
+.ptab {
+  font-size: 12px; font-family: var(--mono); padding: 10px 14px;
+  cursor: pointer; color: var(--text3); border-bottom: 2px solid transparent;
+  margin-bottom: -0.5px; transition: .15s; user-select: none;
+}
+.ptab:hover { color: var(--text2); }
+.ptab.active { color: var(--teal); border-bottom-color: var(--teal); }
+
+/* ── Persona result ─────────────────────────────────────────────────── */
+.persona-result { padding: 18px; display: none; }
+.persona-result.active { display: block; }
+.verdict-row {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 16px;
+}
+.verdict-badge {
+  font-size: 11px; font-weight: 600; font-family: var(--mono); letter-spacing: .05em;
+  padding: 4px 10px; border-radius: 4px; text-transform: uppercase;
+}
+.verdict-score { font-size: 20px; font-weight: 600; }
+
+.dim-block { margin-bottom: 14px; }
+.dim-head { display: flex; justify-content: space-between; margin-bottom: 5px; }
+.dim-name-txt { font-size: 12px; color: var(--text2); }
+.dim-score-txt { font-size: 12px; font-weight: 600; font-family: var(--mono); }
+.dim-track { height: 3px; background: var(--bg4); border-radius: 2px; margin-bottom: 5px; }
+.dim-fill-bar { height: 100%; border-radius: 2px; transition: width .6s ease; }
+.dim-critique { font-size: 11px; color: var(--text3); line-height: 1.5; font-style: italic; }
+
+.assessment-box {
+  background: var(--bg3); border-radius: var(--radius-sm); padding: 12px 14px;
+  font-size: 12px; color: var(--text2); line-height: 1.6; margin-top: 14px;
+  border-left: 2px solid var(--teal-dim);
+}
+
+/* ── Heatmap table ──────────────────────────────────────────────────── */
+.heatmap-wrap { padding: 18px; border-top: 0.5px solid var(--border); }
+.heatmap-label {
+  font-family: var(--mono); font-size: 10px; text-transform: uppercase;
+  letter-spacing: .08em; color: var(--text3); margin-bottom: 12px;
+}
+table { width: 100%; border-collapse: collapse; font-size: 12px; }
+th { font-family: var(--mono); font-size: 10px; letter-spacing: .05em;
+     text-transform: uppercase; color: var(--text3); text-align: left;
+     padding: 6px 10px; border-bottom: 0.5px solid var(--border); }
+td { padding: 8px 10px; border-bottom: 0.5px solid var(--border); color: var(--text2); }
+tr:last-child td { border-bottom: none; }
+.cell-score { font-family: var(--mono); font-weight: 500; text-align: center; }
+.score-hi  { color: var(--teal); }
+.score-mid { color: var(--amber); }
+.score-lo  { color: var(--red); }
+.total-row td { font-weight: 600; font-family: var(--mono); background: var(--bg3); }
+
+/* ── Status bar ─────────────────────────────────────────────────────── */
+.status-bar {
+  font-family: var(--mono); font-size: 11px; color: var(--text3);
+  padding: 10px 18px; border-top: 0.5px solid var(--border);
+  display: flex; align-items: center; gap: 8px;
+}
+.status-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--text3); }
+.status-dot.active { background: var(--teal); animation: pulse 1.5s ease infinite; }
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.3} }
+</style>
+</head>
+<body>
+<div class="shell">
+
+  <div class="top-bar">
+    <div class="wordmark">CCOS · <span>Creative Confidence</span> Operating System</div>
+    <div class="version-tag">bridge_v1 · social_static</div>
+  </div>
+
+  <div class="hero">
+    <p class="hero-eyebrow">AVC Creative OS · Scoring Engine</p>
+    <h1>Upload a creative.<br><strong>Get a confidence score.</strong></h1>
+    <p>Social Static proof of concept. Upload a Meta Feed, Instagram, or LinkedIn static creative and receive a CCS across four rubric dimensions, evaluated by three Synthetic Personas.</p>
+  </div>
+
+  <div class="cols">
+
+    <!-- LEFT: Input panel -->
+    <div>
+      <div class="panel" style="margin-bottom:16px">
+        <div class="panel-header">
+          <div class="panel-dot"></div>
+          <span class="panel-title">Creative asset</span>
+        </div>
+        <div class="panel-body">
+          <div id="upload-area">
+            <div class="upload-zone" id="drop-zone">
+              <input type="file" accept="image/*" id="file-input" onchange="handleFile(this.files[0])">
+              <div class="upload-icon">↑</div>
+              <p>Drop image or click to upload</p>
+              <small>JPG, PNG, WEBP · Max 5MB</small>
+            </div>
+          </div>
+          <div id="preview-area" style="display:none">
+            <div class="preview-wrap">
+              <img id="preview-img" src="" alt="Creative preview">
+              <button class="preview-clear" onclick="clearImage()" title="Remove">✕</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel" style="margin-bottom:16px">
+        <div class="panel-header">
+          <div class="panel-dot"></div>
+          <span class="panel-title">Campaign context</span>
+        </div>
+        <div class="panel-body">
+          <div class="field">
+            <label>Platform</label>
+            <select id="platform">
+              <option value="meta_feed">Meta Feed</option>
+              <option value="instagram_feed">Instagram Feed</option>
+              <option value="linkedin_feed">LinkedIn Feed</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Intent signal</label>
+            <select id="intent">
+              <option value="warm" selected>Warm — aware, considering</option>
+              <option value="hot">Hot — in-market, ready to buy</option>
+              <option value="cold">Cold — unaware, passive</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Caption copy (optional)</label>
+            <textarea id="caption" placeholder="Paste the post caption or ad copy here…"></textarea>
+          </div>
+          <div class="field">
+            <label>Brand voice</label>
+            <input type="text" id="brand-voice" value="Approachable and direct — outcome-led, avoids jargon" placeholder="Describe the brand voice…">
+          </div>
+        </div>
+      </div>
+
+      <div class="panel" style="margin-bottom:16px">
+        <div class="panel-header">
+          <div class="panel-dot" style="background:var(--purple)"></div>
+          <span class="panel-title">API key</span>
+        </div>
+        <div class="panel-body">
+          <div class="field" style="margin-bottom:0">
+            <label>Anthropic API key</label>
+            <div class="key-row">
+              <input type="password" id="api-key" placeholder="sk-ant-…" autocomplete="off">
+              <button class="key-toggle" onclick="toggleKey()">Show</button>
+            </div>
+            <div style="font-size:11px;color:var(--text3);margin-top:6px">
+              Key is used in-browser only. Never sent to any server except api.anthropic.com.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <button class="run-btn" id="run-btn" onclick="runScoring()" disabled>
+        <span id="btn-label">Run CCOS evaluation</span>
+      </button>
+    </div>
+
+    <!-- RIGHT: Results panel -->
+    <div class="panel" id="results-panel">
+      <div id="result-empty" class="result-empty">
+        <div class="idle-mark">◎</div>
+        <p>Upload a creative and run the evaluation.</p>
+        <p style="font-family:var(--mono);font-size:11px;color:var(--text3)">
+          3 personas · 4 dimensions · CCS output
+        </p>
+      </div>
+      <div id="result-content" style="display:none"></div>
+      <div class="status-bar">
+        <div class="status-dot" id="status-dot"></div>
+        <span id="status-text">Idle</span>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+let imageData = null;
+let imageMediaType = 'image/jpeg';
+let currentPersona = 0;
+let scoringResults = null;
+
+// ── File handling ────────────────────────────────────────────────────────────
+function handleFile(file) {
+  if (!file) return;
+  if (file.size > 5 * 1024 * 1024) { alert('Max file size is 5MB'); return; }
+  imageMediaType = file.type || 'image/jpeg';
+  const reader = new FileReader();
+  reader.onload = e => {
+    const b64full = e.target.result;
+    imageData = b64full.split(',')[1];
+    document.getElementById('preview-img').src = b64full;
+    document.getElementById('upload-area').style.display = 'none';
+    document.getElementById('preview-area').style.display = 'block';
+    checkRunnable();
+  };
+  reader.readAsDataURL(file);
+}
+
+function clearImage() {
+  imageData = null;
+  document.getElementById('file-input').value = '';
+  document.getElementById('preview-area').style.display = 'none';
+  document.getElementById('upload-area').style.display = 'block';
+  checkRunnable();
+}
+
+function toggleKey() {
+  const inp = document.getElementById('api-key');
+  const btn = document.querySelector('.key-toggle');
+  inp.type = inp.type === 'password' ? 'text' : 'password';
+  btn.textContent = inp.type === 'password' ? 'Show' : 'Hide';
+}
+
+document.getElementById('api-key').addEventListener('input', checkRunnable);
+
+function checkRunnable() {
+  const hasImage = !!imageData;
+  const hasKey   = document.getElementById('api-key').value.trim().startsWith('sk-ant');
+  document.getElementById('run-btn').disabled = !(hasImage && hasKey);
+}
+
+// Drag and drop
+const dz = document.getElementById('drop-zone');
+dz.addEventListener('dragover', e => { e.preventDefault(); dz.classList.add('drag'); });
+dz.addEventListener('dragleave', () => dz.classList.remove('drag'));
+dz.addEventListener('drop', e => { e.preventDefault(); dz.classList.remove('drag'); handleFile(e.dataTransfer.files[0]); });
+
+// ── Rubric ───────────────────────────────────────────────────────────────────
+const RUBRIC = {
+  format_name: 'Social Static',
+  dimensions: [
+    { id: 'stop_scroll_hierarchy', name: 'Stop-scroll hierarchy', weight: 0.35,
+      guide: 'Does the creative have a single dominant visual that commands attention within 1.5 seconds? Is there clear visual hierarchy (hero → supporting → CTA)? Does it differentiate from generic category creative? 100=instantly arresting. 50=visible but forgettable. 0=chaotic or invisible.' },
+    { id: 'text_image_ratio', name: 'Text-to-image ratio', weight: 0.20,
+      guide: 'Is the text-to-image ratio appropriate for the platform? Is on-image text legible at mobile size? Does text placement respect safe zones? 100=perfect balance. 50=readable but crowded. 0=text-heavy or safe-zone violation.' },
+    { id: 'native_feel', name: 'Platform nativeness', weight: 0.25,
+      guide: 'Does the creative feel native to the platform or imported from another context? Does the aspect ratio, composition, and tone match platform norms? 100=indistinguishable from organic content. 50=clearly an ad. 0=obviously imported.' },
+    { id: 'caption_cta_alignment', name: 'Caption & CTA alignment', weight: 0.20,
+      guide: 'Is the CTA calibrated to the intent signal? (Hot=transactional, Warm=inviting, Cold=curious). Is copy specific and outcome-led? 100=precisely calibrated. 50=functional but generic. 0=wrong intent register.' }
+  ]
+};
+
+const PERSONAS = [
+  { intent: 'hot',  label: 'HOT',
+    profile: 'In-market, active purchase intent. Ready to buy. Fast scroll, scanning for reason to stop. Responds to: specific, proven, ships today. Alienated by: journey, curated, elevate. Rejects pressure tactics. Wants transactional CTA.' },
+  { intent: 'warm', label: 'WARM',
+    profile: 'Aware, actively considering. Medium scroll speed. Responds to clear outcomes, brand differentiation, specific benefits. Alienated by hard sell and urgency. Wants inviting low-pressure CTA.' },
+  { intent: 'cold', label: 'COLD',
+    profile: 'Unaware or passively adjacent. Fast scroll, low tolerance for ads. Pauses for visual distinction, cultural relevance, curiosity. Alienated by anything that feels like advertising. Rejects all transactional language.' }
+];
+
+// ── API call ─────────────────────────────────────────────────────────────────
+async function scorePersona(persona, apiKey, platform, intent, brandVoice, caption) {
+  const dimBlock = RUBRIC.dimensions.map((d, i) =>
+    `DIMENSION ${i+1}: ${d.name}\n${d.guide}`
+  ).join('\n\n');
+
+  const captionBlock = caption ? `\nCaption copy to evaluate:\n"${caption}"\n` : '';
+
+  const prompt = `You are evaluating a social media creative for the CCOS scoring engine.
+
+PERSONA PROFILE (evaluate from this perspective — you are this person, not a marketer):
+Intent signal: ${persona.intent.toUpperCase()}
+${persona.profile}
+
+CONTEXT
+Platform: ${platform.replace('_',' ')}
+Campaign intent signal: ${intent.toUpperCase()}
+Brand voice: ${brandVoice}
+The creative appears in a social feed. The viewer scrolls at speed and has ~1.5 seconds to be stopped.
+${captionBlock}
+SCORING RUBRIC — score each dimension 0–100:
+${dimBlock}
+
+INSTRUCTIONS
+Evaluate the image from this persona's perspective. Score each dimension independently.
+Write a specific 1-sentence critique per dimension.
+Write a 2-sentence overall assessment from this persona's viewpoint.
+State verdict: launch_ready (weighted ≥70) | needs_revision (55–69) | do_not_run (<55)
+
+Return ONLY valid JSON with no preamble or markdown:
+{"persona_intent":"${persona.intent}","dimension_scores":{"stop_scroll_hierarchy":{"score":0,"critique":""},"text_image_ratio":{"score":0,"critique":""},"native_feel":{"score":0,"critique":""},"caption_cta_alignment":{"score":0,"critique":""}},"overall_assessment":"","verdict":"needs_revision"}`;
+
+  const res = await fetch('https://api.anthropic.com/v1/messages', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'x-api-key': apiKey,
+      'anthropic-version': '2023-06-01',
+      'anthropic-dangerous-direct-browser-access': 'true'
+    },
+    body: JSON.stringify({
+      model: 'claude-sonnet-4-20250514',
+      max_tokens: 1000,
+      messages: [{
+        role: 'user',
+        content: [
+          { type: 'image', source: { type: 'base64', media_type: imageMediaType, data: imageData } },
+          { type: 'text', text: prompt }
+        ]
+      }]
+    })
+  });
+
+  if (!res.ok) {
+    const err = await res.json();
+    throw new Error(err.error?.message || `API error ${res.status}`);
+  }
+
+  const data = await res.json();
+  let text = data.content[0].text.trim();
+  text = text.replace(/^```json\s*|^```\s*|```$/gm, '').trim();
+  const parsed = JSON.parse(text);
+
+  // Compute weighted score
+  let weighted = 0;
+  RUBRIC.dimensions.forEach(d => {
+    const s = parsed.dimension_scores?.[d.id]?.score || 0;
+    weighted += s * d.weight;
+  });
+  parsed._weighted = Math.round(weighted * 10) / 10;
+  return parsed;
+}
+
+// ── Scoring orchestration ────────────────────────────────────────────────────
+async function runScoring() {
+  const apiKey = document.getElementById('api-key').value.trim();
+  const platform = document.getElementById('platform').value;
+  const intent = document.getElementById('intent').value;
+  const caption = document.getElementById('caption').value.trim();
+  const brandVoice = document.getElementById('brand-voice').value.trim();
+
+  setStatus('active', 'Running evaluation…');
+  setRunning(true);
+
+  document.getElementById('result-empty').style.display = 'none';
+  document.getElementById('result-content').style.display = 'block';
+  document.getElementById('result-content').innerHTML = renderSkeleton();
+
+  const results = [];
+  for (let i = 0; i < PERSONAS.length; i++) {
+    setStatus('active', `Scoring ${PERSONAS[i].label} persona (${i+1}/3)…`);
+    try {
+      const r = await scorePersona(PERSONAS[i], apiKey, platform, intent, brandVoice, caption);
+      results.push(r);
+    } catch (e) {
+      setRunning(false);
+      setStatus('', `Error: ${e.message}`);
+      document.getElementById('result-content').innerHTML = `<div style="padding:24px;color:var(--red);font-size:13px">Error: ${e.message}</div>`;
+      return;
+    }
+  }
+
+  scoringResults = results;
+  const ccs = Math.round((results.reduce((a, r) => a + r._weighted, 0) / results.length) * 10) / 10;
+  const consensus = checkConsensus(results);
+
+  document.getElementById('result-content').innerHTML = renderResults(results, ccs, consensus, platform, intent);
+  currentPersona = 0;
+  showPersona(0);
+  setRunning(false);
+  setStatus('', `CCS: ${ccs} · ${getThresholdLabel(ccs).label}`);
+}
+
+function checkConsensus(results) {
+  const verdictMap = { launch_ready: 2, needs_revision: 1, do_not_run: 0 };
+  const verdicts = results.map(r => verdictMap[r.verdict] ?? 1);
+  const scores = results.map(r => r._weighted);
+  const avg = scores.reduce((a,b)=>a+b,0) / scores.length;
+  const std = Math.sqrt(scores.reduce((a,s)=>a+(s-avg)**2,0)/scores.length);
+  const range = Math.max(...verdicts) - Math.min(...verdicts);
+  return {
+    warning: range >= 2 || std > 12,
+    std: Math.round(std*10)/10,
+    range,
+    verdicts: results.map(r => r.verdict)
+  };
+}
+
+function getThresholdLabel(ccs) {
+  if (ccs >= 70) return { label: 'Launch-ready', action: 'Proceed to activation', color: 'var(--teal)' };
+  if (ccs >= 55) return { label: 'Needs revision', action: 'Return with critique', color: 'var(--amber)' };
+  return { label: 'Do not run', action: 'Rebuild', color: 'var(--red)' };
+}
+
+function getVerdictStyle(verdict) {
+  const map = {
+    launch_ready:   { bg: 'var(--teal-bg)',   color: 'var(--teal)',  border: 'rgba(45,214,160,.2)' },
+    needs_revision: { bg: 'var(--amber-bg)',  color: 'var(--amber)', border: 'rgba(232,169,53,.2)' },
+    do_not_run:     { bg: 'var(--red-bg)',    color: 'var(--red)',   border: 'rgba(224,85,85,.2)' }
+  };
+  return map[verdict] || map.needs_revision;
+}
+
+// ── Render ───────────────────────────────────────────────────────────────────
+function renderSkeleton() {
+  return `<div style="padding:24px;display:flex;flex-direction:column;gap:12px">
+    ${[1,2,3].map(()=>`<div style="height:60px;background:var(--bg3);border-radius:8px;animation:pulse 1.5s ease infinite"></div>`).join('')}
+  </div>`;
+}
+
+function renderResults(results, ccs, consensus, platform, intent) {
+  const th = getThresholdLabel(ccs);
+  const circ = 2 * Math.PI * 36;
+  const fill = circ * (ccs / 100);
+
+  let html = `
+  <div class="score-hero">
+    <div class="ring-wrap">
+      <svg width="88" height="88" viewBox="0 0 88 88">
+        <circle cx="44" cy="44" r="36" fill="none" stroke="var(--bg4)" stroke-width="7"/>
+        <circle cx="44" cy="44" r="36" fill="none" stroke="${th.color}" stroke-width="7"
+          stroke-dasharray="${fill.toFixed(1)} ${circ.toFixed(1)}" stroke-linecap="round"/>
+      </svg>
+      <div class="ring-center">
+        <span class="ring-num" style="color:${th.color}">${ccs}</span>
+        <span class="ring-denom">/100</span>
+      </div>
+    </div>
+    <div class="score-meta">
+      <div class="score-label" style="color:${th.color}">${th.label}</div>
+      <div class="score-action">${th.action}</div>
+      <div class="score-tags">
+        <span class="tag tag-platform">${platform.replace('_',' ')}</span>
+        <span class="tag tag-intent">${intent}</span>
+        ${consensus.warning ? '<span class="tag tag-warn">⚠ consensus warning</span>' : ''}
+      </div>
+    </div>
+  </div>`;
+
+  if (consensus.warning) {
+    html += `
+  <div class="consensus-warn" style="margin:14px 18px 0">
+    <div>⚠</div>
+    <div>
+      <strong>Consensus Warning active</strong>
+      Personas produced significantly divergent verdicts — ${consensus.verdicts.join(' · ')}.
+      Score std dev: ${consensus.std}. Review per-persona critiques before any activation decision.
+    </div>
+  </div>`;
+  }
+
+  html += `
+  <div class="persona-tabs" style="margin-top:14px">
+    ${PERSONAS.map((p,i) => {
+      const r = results[i];
+      const vs = getVerdictStyle(r?.verdict);
+      return `<div class="ptab" id="ptab-${i}" onclick="showPersona(${i})" style="--pcolor:${vs.color}">
+        ${p.label} <span style="font-size:10px;color:${vs.color};margin-left:4px">${r?._weighted||'—'}</span>
+      </div>`;
+    }).join('')}
+  </div>`;
+
+  results.forEach((r, i) => {
+    const vs = getVerdictStyle(r.verdict);
+    html += `
+  <div class="persona-result" id="presult-${i}">
+    <div class="verdict-row">
+      <span class="verdict-badge" style="background:${vs.bg};color:${vs.color};border:0.5px solid ${vs.border}">
+        ${r.verdict.replace('_',' ')}
+      </span>
+      <span class="verdict-score" style="color:${vs.color}">${r._weighted}</span>
+    </div>`;
+
+    RUBRIC.dimensions.forEach(d => {
+      const entry = r.dimension_scores?.[d.id] || {};
+      const score = entry.score || 0;
+      const color = score >= 70 ? 'var(--teal)' : score >= 55 ? 'var(--amber)' : 'var(--red)';
+      html += `
+    <div class="dim-block">
+      <div class="dim-head">
+        <span class="dim-name-txt">${d.name}</span>
+        <span class="dim-score-txt" style="color:${color}">${score}</span>
+      </div>
+      <div class="dim-track">
+        <div class="dim-fill-bar" style="width:${score}%;background:${color}"></div>
+      </div>
+      <div class="dim-critique">${entry.critique || ''}</div>
+    </div>`;
+    });
+
+    html += `
+    <div class="assessment-box">${r.overall_assessment || ''}</div>
+  </div>`;
+  });
+
+  // Heatmap
+  html += `
+  <div class="heatmap-wrap">
+    <div class="heatmap-label">Dimension heatmap</div>
+    <table>
+      <tr><th>Dimension</th><th>Weight</th>${PERSONAS.map(p=>`<th>${p.label}</th>`).join('')}<th>Avg</th></tr>`;
+
+  RUBRIC.dimensions.forEach(d => {
+    const scores = results.map(r => r.dimension_scores?.[d.id]?.score || 0);
+    const avg = Math.round(scores.reduce((a,b)=>a+b,0) / scores.length);
+    html += `<tr><td>${d.name}</td><td style="color:var(--text3);font-family:var(--mono)">${Math.round(d.weight*100)}%</td>`;
+    scores.forEach(s => {
+      const cls = s >= 70 ? 'score-hi' : s >= 55 ? 'score-mid' : 'score-lo';
+      html += `<td class="cell-score ${cls}">${s}</td>`;
+    });
+    const avgcls = avg >= 70 ? 'score-hi' : avg >= 55 ? 'score-mid' : 'score-lo';
+    html += `<td class="cell-score ${avgcls}" style="font-weight:600">${avg}</td></tr>`;
+  });
+
+  const th2 = getThresholdLabel(ccs);
+  html += `<tr class="total-row"><td>CCS (weighted avg)</td><td></td>`;
+  results.forEach(r => {
+    html += `<td class="cell-score" style="color:${th2.color}">${r._weighted}</td>`;
+  });
+  html += `<td class="cell-score" style="color:${th2.color};font-size:15px">${ccs}</td></tr>`;
+  html += `</table></div>`;
+
+  return html;
+}
+
+function showPersona(idx) {
+  document.querySelectorAll('.ptab').forEach((t,i) => t.classList.toggle('active', i===idx));
+  document.querySelectorAll('.persona-result').forEach((p,i) => p.classList.toggle('active', i===idx));
+  currentPersona = idx;
+}
+
+function setRunning(running) {
+  const btn = document.getElementById('run-btn');
+  const label = document.getElementById('btn-label');
+  btn.disabled = running;
+  label.innerHTML = running
+    ? '<div class="spinner"></div> Evaluating…'
+    : 'Run CCOS evaluation';
+}
+
+function setStatus(state, text) {
+  document.getElementById('status-dot').className = 'status-dot' + (state === 'active' ? ' active' : '');
+  document.getElementById('status-text').textContent = text;
+}
+</script>
+</body>
+</html>
