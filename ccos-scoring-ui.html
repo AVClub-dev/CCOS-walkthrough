@@ -3,748 +3,1215 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CCOS — Creative Confidence Operating System</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&display=swap" rel="stylesheet">
+<title>CCOS · Creative Confidence Scoring</title>
 <style>
-:root {
-  --bg:         #0e0e0c;
-  --bg2:        #161614;
-  --bg3:        #1e1e1b;
-  --bg4:        #262622;
-  --border:     rgba(255,255,255,0.07);
-  --border2:    rgba(255,255,255,0.13);
-  --text:       #f0efe8;
-  --text2:      #8a897f;
-  --text3:      #56554d;
-  --teal:       #2dd6a0;
-  --teal-dim:   #1a7a5c;
-  --teal-bg:    rgba(45,214,160,0.08);
-  --amber:      #e8a935;
-  --amber-bg:   rgba(232,169,53,0.08);
-  --red:        #e05555;
-  --red-bg:     rgba(224,85,85,0.08);
-  --purple:     #a78bfa;
-  --purple-bg:  rgba(167,139,250,0.08);
-  --mono:       'DM Mono', monospace;
-  --sans:       'DM Sans', sans-serif;
-  --radius:     10px;
-  --radius-sm:  6px;
-}
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { scroll-behavior: smooth; }
-body {
-  font-family: var(--sans);
-  background: var(--bg);
-  color: var(--text);
-  min-height: 100vh;
-  font-size: 14px;
-  line-height: 1.6;
-  -webkit-font-smoothing: antialiased;
-}
+  @import url('https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&family=Syne:wght@400;500;600;700;800&display=swap');
 
-/* ── Layout ─────────────────────────────────────────────────────────── */
-.shell { max-width: 960px; margin: 0 auto; padding: 0 24px 80px; }
-.top-bar {
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 20px 0; border-bottom: 0.5px solid var(--border);
-  margin-bottom: 40px;
-}
-.wordmark { font-family: var(--mono); font-size: 13px; font-weight: 500; letter-spacing: .05em; }
-.wordmark span { color: var(--teal); }
-.version-tag {
-  font-family: var(--mono); font-size: 11px; color: var(--text3);
-  border: 0.5px solid var(--border2); padding: 3px 10px; border-radius: 20px;
-}
+  :root {
+    --bg: #0a0a0f;
+    --surface: #111118;
+    --surface-2: #181820;
+    --surface-3: #1e1e28;
+    --border: #2a2a38;
+    --border-soft: #1e1e2a;
+    --text: #e8e8f0;
+    --text-muted: #6b6b80;
+    --text-dim: #3a3a50;
+    --accent: #7c6af7;
+    --accent-glow: rgba(124, 106, 247, 0.15);
+    --accent-dim: rgba(124, 106, 247, 0.08);
+    --green: #3ecf8e;
+    --green-dim: rgba(62, 207, 142, 0.12);
+    --amber: #f5a623;
+    --amber-dim: rgba(245, 166, 35, 0.12);
+    --red: #f06060;
+    --red-dim: rgba(240, 96, 96, 0.12);
+    --mono: 'DM Mono', monospace;
+    --sans: 'Syne', sans-serif;
+  }
 
-.hero { margin-bottom: 48px; }
-.hero-eyebrow {
-  font-family: var(--mono); font-size: 11px; font-weight: 500;
-  letter-spacing: .1em; text-transform: uppercase;
-  color: var(--teal); margin-bottom: 14px;
-}
-.hero h1 { font-size: 36px; font-weight: 300; line-height: 1.2; margin-bottom: 14px; letter-spacing: -.01em; }
-.hero h1 strong { font-weight: 600; }
-.hero p { font-size: 14px; color: var(--text2); max-width: 560px; line-height: 1.7; }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-/* ── Two-col layout ─────────────────────────────────────────────────── */
-.cols { display: grid; grid-template-columns: 380px 1fr; gap: 24px; align-items: start; }
-@media (max-width: 780px) { .cols { grid-template-columns: 1fr; } }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--mono);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
 
-/* ── Panel ──────────────────────────────────────────────────────────── */
-.panel {
-  background: var(--bg2); border: 0.5px solid var(--border);
-  border-radius: var(--radius); overflow: hidden;
-}
-.panel-header {
-  padding: 14px 18px; border-bottom: 0.5px solid var(--border);
-  display: flex; align-items: center; gap: 8px;
-}
-.panel-title { font-family: var(--mono); font-size: 11px; font-weight: 500;
-               letter-spacing: .08em; text-transform: uppercase; color: var(--text2); }
-.panel-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--teal); flex-shrink: 0; }
-.panel-body { padding: 18px; }
+  /* Grid noise texture */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(124,106,247,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(124,106,247,0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+    z-index: 0;
+  }
 
-/* ── Form elements ──────────────────────────────────────────────────── */
-.field { margin-bottom: 16px; }
-.field label {
-  display: block; font-size: 11px; font-weight: 500; letter-spacing: .05em;
-  text-transform: uppercase; color: var(--text3); margin-bottom: 6px;
-}
-select, input[type=text] {
-  width: 100%; background: var(--bg3); border: 0.5px solid var(--border2);
-  border-radius: var(--radius-sm); padding: 9px 12px; color: var(--text);
-  font-family: var(--sans); font-size: 13px; outline: none;
-  transition: border-color .15s;
-  appearance: none; -webkit-appearance: none;
-}
-select { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23565550'/%3E%3C/svg%3E");
-  background-repeat: no-repeat; background-position: right 12px center; padding-right: 32px; }
-select:focus, input[type=text]:focus { border-color: var(--teal); }
-textarea {
-  width: 100%; background: var(--bg3); border: 0.5px solid var(--border2);
-  border-radius: var(--radius-sm); padding: 9px 12px; color: var(--text);
-  font-family: var(--sans); font-size: 13px; outline: none; resize: vertical;
-  min-height: 72px; transition: border-color .15s;
-}
-textarea:focus { border-color: var(--teal); }
+  .shell {
+    position: relative;
+    z-index: 1;
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 48px 24px 80px;
+  }
 
-/* ── Upload zone ────────────────────────────────────────────────────── */
-.upload-zone {
-  border: 1px dashed var(--border2); border-radius: var(--radius);
-  padding: 28px; text-align: center; cursor: pointer; transition: all .2s;
-  position: relative; background: var(--bg3);
-}
-.upload-zone:hover, .upload-zone.drag { border-color: var(--teal); background: var(--teal-bg); }
-.upload-zone input { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
-.upload-icon { font-size: 28px; margin-bottom: 8px; opacity: .4; }
-.upload-zone p { font-size: 13px; color: var(--text2); }
-.upload-zone small { font-size: 11px; color: var(--text3); }
-.preview-wrap { position: relative; }
-.preview-wrap img { width: 100%; border-radius: var(--radius-sm); display: block; }
-.preview-clear {
-  position: absolute; top: 8px; right: 8px; background: rgba(0,0,0,.7);
-  border: none; color: var(--text); border-radius: 50%; width: 24px; height: 24px;
-  cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center;
-}
+  /* ── HEADER ── */
+  .header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 48px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid var(--border);
+  }
+  .header-left { display: flex; flex-direction: column; gap: 6px; }
+  .logo {
+    font-family: var(--sans);
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+  .header h1 {
+    font-family: var(--sans);
+    font-size: 26px;
+    font-weight: 800;
+    color: var(--text);
+    line-height: 1.2;
+  }
+  .header-meta {
+    font-size: 11px;
+    color: var(--text-muted);
+    letter-spacing: 0.08em;
+    margin-top: 4px;
+  }
+  .version-badge {
+    font-family: var(--mono);
+    font-size: 11px;
+    padding: 4px 10px;
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    background: var(--surface);
+    letter-spacing: 0.06em;
+    align-self: flex-start;
+  }
 
-/* ── API key input ──────────────────────────────────────────────────── */
-.key-row { display: flex; gap: 8px; }
-.key-row input { flex: 1; font-family: var(--mono); font-size: 12px; }
-.key-toggle {
-  background: var(--bg4); border: 0.5px solid var(--border2); color: var(--text2);
-  border-radius: var(--radius-sm); padding: 0 12px; cursor: pointer; font-size: 12px;
-  white-space: nowrap; transition: .15s;
-}
-.key-toggle:hover { border-color: var(--border2); color: var(--text); }
+  /* ── SECTION LABEL ── */
+  .section-label {
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 12px;
+  }
 
-/* ── Run button ─────────────────────────────────────────────────────── */
-.run-btn {
-  width: 100%; padding: 12px; background: var(--teal); border: none;
-  border-radius: var(--radius-sm); color: #0a2e22; font-family: var(--sans);
-  font-size: 14px; font-weight: 600; cursor: pointer; transition: all .2s;
-  display: flex; align-items: center; justify-content: center; gap: 8px;
-  letter-spacing: .01em; margin-top: 4px;
-}
-.run-btn:hover:not(:disabled) { background: #3de8b0; }
-.run-btn:disabled { opacity: .4; cursor: not-allowed; }
-.run-btn .spinner { width: 14px; height: 14px; border: 2px solid rgba(0,40,30,.3);
-  border-top-color: #0a2e22; border-radius: 50%; animation: spin .7s linear infinite; }
-@keyframes spin { to { transform: rotate(360deg); } }
+  /* ── CONFIG PANEL ── */
+  .config-panel {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 28px;
+    margin-bottom: 16px;
+  }
+  .config-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 16px;
+  }
+  .config-grid.three { grid-template-columns: 1fr 1fr 1fr; }
+  .field { display: flex; flex-direction: column; gap: 8px; }
+  .field label {
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+  .field select,
+  .field input,
+  .field textarea {
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    color: var(--text);
+    font-family: var(--mono);
+    font-size: 13px;
+    padding: 10px 12px;
+    outline: none;
+    transition: border-color 0.15s;
+    appearance: none;
+    width: 100%;
+  }
+  .field select:focus,
+  .field input:focus,
+  .field textarea:focus { border-color: var(--accent); }
+  .field select {
+    cursor: pointer;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath d='M2 4l4 4 4-4' fill='none' stroke='%236b6b80' stroke-width='1.5'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    padding-right: 32px;
+  }
+  .field textarea { resize: vertical; min-height: 80px; }
 
-/* ── Results panel ──────────────────────────────────────────────────── */
-.result-empty {
-  display: flex; flex-direction: column; align-items: center; justify-content: center;
-  min-height: 400px; color: var(--text3); text-align: center; gap: 12px;
-}
-.result-empty .idle-mark {
-  font-family: var(--mono); font-size: 48px; opacity: .15;
-}
-.result-empty p { font-size: 13px; }
+  /* Format description */
+  .format-desc {
+    font-size: 11px;
+    color: var(--text-muted);
+    padding: 10px 12px;
+    background: var(--surface-2);
+    border: 1px solid var(--border-soft);
+    border-top: none;
+    line-height: 1.6;
+    display: none;
+  }
+  .format-desc.visible { display: block; }
 
-/* ── Score ring ─────────────────────────────────────────────────────── */
-.score-hero {
-  display: flex; align-items: center; gap: 24px;
-  padding: 20px 18px; border-bottom: 0.5px solid var(--border);
-}
-.ring-wrap { position: relative; width: 88px; height: 88px; flex-shrink: 0; }
-.ring-wrap svg { transform: rotate(-90deg); }
-.ring-center {
-  position: absolute; inset: 0; display: flex; flex-direction: column;
-  align-items: center; justify-content: center;
-}
-.ring-num { font-size: 26px; font-weight: 600; line-height: 1; }
-.ring-denom { font-size: 10px; color: var(--text3); font-family: var(--mono); margin-top: 1px; }
-.score-meta { flex: 1; }
-.score-label {
-  font-size: 18px; font-weight: 600; letter-spacing: -.01em; margin-bottom: 4px;
-}
-.score-action { font-size: 12px; color: var(--text2); margin-bottom: 8px; }
-.score-tags { display: flex; gap: 6px; flex-wrap: wrap; }
-.tag {
-  font-family: var(--mono); font-size: 10px; padding: 3px 8px;
-  border-radius: 4px; border: 0.5px solid;
-}
-.tag-platform { border-color: var(--border2); color: var(--text2); }
-.tag-intent   { border-color: var(--teal-dim); color: var(--teal); }
-.tag-warn     { border-color: rgba(232,169,53,.4); color: var(--amber); background: var(--amber-bg); }
+  /* ── UPLOAD ZONE ── */
+  .upload-zone {
+    border: 1px dashed var(--border);
+    padding: 32px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    background: var(--surface-2);
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 16px;
+  }
+  .upload-zone:hover { border-color: var(--accent); background: var(--accent-dim); }
+  .upload-zone.has-image { padding: 0; border-style: solid; border-color: var(--border); }
+  .upload-zone input[type=file] {
+    position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%;
+  }
+  .upload-label {
+    font-size: 12px;
+    color: var(--text-muted);
+    letter-spacing: 0.06em;
+    pointer-events: none;
+  }
+  .upload-label span { color: var(--accent); }
+  .preview-img {
+    width: 100%;
+    max-height: 280px;
+    object-fit: contain;
+    display: block;
+    background: #0a0a0f;
+  }
+  .upload-caption {
+    font-size: 10px;
+    color: var(--text-dim);
+    letter-spacing: 0.1em;
+    margin-top: 8px;
+    text-align: center;
+  }
 
-/* ── Consensus warning ──────────────────────────────────────────────── */
-.consensus-warn {
-  margin: 0 18px 0; padding: 12px 14px;
-  background: var(--amber-bg); border: 0.5px solid rgba(232,169,53,.3);
-  border-radius: var(--radius-sm); font-size: 12px; color: var(--amber);
-  display: flex; gap: 10px; align-items: flex-start;
-}
-.consensus-warn strong { display: block; margin-bottom: 3px; }
+  /* ── API KEY ── */
+  .api-row {
+    display: flex;
+    gap: 12px;
+    align-items: flex-end;
+    margin-bottom: 20px;
+  }
+  .api-row .field { flex: 1; }
+  .api-row .field input { font-size: 12px; letter-spacing: 0.04em; }
 
-/* ── Persona tabs ───────────────────────────────────────────────────── */
-.persona-tabs {
-  display: flex; border-bottom: 0.5px solid var(--border);
-  padding: 0 18px;
-}
-.ptab {
-  font-size: 12px; font-family: var(--mono); padding: 10px 14px;
-  cursor: pointer; color: var(--text3); border-bottom: 2px solid transparent;
-  margin-bottom: -0.5px; transition: .15s; user-select: none;
-}
-.ptab:hover { color: var(--text2); }
-.ptab.active { color: var(--teal); border-bottom-color: var(--teal); }
+  /* ── PRE-GATE ── */
+  .pregate-panel {
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    padding: 20px;
+    margin-bottom: 16px;
+    display: none;
+  }
+  .pregate-panel.visible { display: block; }
+  .pregate-title {
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--amber);
+    margin-bottom: 10px;
+  }
+  .pregate-desc {
+    font-size: 12px;
+    color: var(--text-muted);
+    line-height: 1.7;
+    white-space: pre-line;
+    margin-bottom: 14px;
+  }
+  .gate-check {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .gate-check label {
+    font-size: 12px;
+    color: var(--text-muted);
+    cursor: pointer;
+  }
+  .gate-check input[type=checkbox] { accent-color: var(--green); width: 14px; height: 14px; }
 
-/* ── Persona result ─────────────────────────────────────────────────── */
-.persona-result { padding: 18px; display: none; }
-.persona-result.active { display: block; }
-.verdict-row {
-  display: flex; align-items: center; justify-content: space-between;
-  margin-bottom: 16px;
-}
-.verdict-badge {
-  font-size: 11px; font-weight: 600; font-family: var(--mono); letter-spacing: .05em;
-  padding: 4px 10px; border-radius: 4px; text-transform: uppercase;
-}
-.verdict-score { font-size: 20px; font-weight: 600; }
+  /* ── RUN BUTTON ── */
+  .run-btn {
+    width: 100%;
+    padding: 16px;
+    background: var(--accent);
+    border: none;
+    color: #fff;
+    font-family: var(--sans);
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.2s;
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 40px;
+  }
+  .run-btn:hover { background: #9480ff; }
+  .run-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+  .run-btn .btn-inner { display: flex; align-items: center; justify-content: center; gap: 10px; }
+  .spinner {
+    width: 16px; height: 16px;
+    border: 2px solid rgba(255,255,255,0.3);
+    border-top-color: #fff;
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+    display: none;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .run-btn.loading .spinner { display: block; }
 
-.dim-block { margin-bottom: 14px; }
-.dim-head { display: flex; justify-content: space-between; margin-bottom: 5px; }
-.dim-name-txt { font-size: 12px; color: var(--text2); }
-.dim-score-txt { font-size: 12px; font-weight: 600; font-family: var(--mono); }
-.dim-track { height: 3px; background: var(--bg4); border-radius: 2px; margin-bottom: 5px; }
-.dim-fill-bar { height: 100%; border-radius: 2px; transition: width .6s ease; }
-.dim-critique { font-size: 11px; color: var(--text3); line-height: 1.5; font-style: italic; }
+  /* ── RESULTS ── */
+  #results { display: none; }
+  #results.visible { display: block; }
 
-.assessment-box {
-  background: var(--bg3); border-radius: var(--radius-sm); padding: 12px 14px;
-  font-size: 12px; color: var(--text2); line-height: 1.6; margin-top: 14px;
-  border-left: 2px solid var(--teal-dim);
-}
+  .results-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 28px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--border);
+  }
+  .results-header h2 {
+    font-family: var(--sans);
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
 
-/* ── Heatmap table ──────────────────────────────────────────────────── */
-.heatmap-wrap { padding: 18px; border-top: 0.5px solid var(--border); }
-.heatmap-label {
-  font-family: var(--mono); font-size: 10px; text-transform: uppercase;
-  letter-spacing: .08em; color: var(--text3); margin-bottom: 12px;
-}
-table { width: 100%; border-collapse: collapse; font-size: 12px; }
-th { font-family: var(--mono); font-size: 10px; letter-spacing: .05em;
-     text-transform: uppercase; color: var(--text3); text-align: left;
-     padding: 6px 10px; border-bottom: 0.5px solid var(--border); }
-td { padding: 8px 10px; border-bottom: 0.5px solid var(--border); color: var(--text2); }
-tr:last-child td { border-bottom: none; }
-.cell-score { font-family: var(--mono); font-weight: 500; text-align: center; }
-.score-hi  { color: var(--teal); }
-.score-mid { color: var(--amber); }
-.score-lo  { color: var(--red); }
-.total-row td { font-weight: 600; font-family: var(--mono); background: var(--bg3); }
+  /* ── SCORE RING ── */
+  .score-block {
+    display: flex;
+    gap: 32px;
+    align-items: center;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 28px;
+    margin-bottom: 16px;
+  }
+  .ring-wrap { position: relative; width: 120px; height: 120px; flex-shrink: 0; }
+  .ring-wrap svg { transform: rotate(-90deg); }
+  .ring-bg { fill: none; stroke: var(--surface-3); stroke-width: 8; }
+  .ring-fill { fill: none; stroke-width: 8; stroke-linecap: round; transition: stroke-dashoffset 1s cubic-bezier(0.4,0,0.2,1); }
+  .ring-text {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+  }
+  .ring-score {
+    font-family: var(--sans);
+    font-size: 32px;
+    font-weight: 800;
+    line-height: 1;
+  }
+  .ring-label { font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--text-muted); }
+  .score-meta { flex: 1; }
+  .verdict-badge {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 5px 12px;
+    margin-bottom: 12px;
+  }
+  .verdict-launch { background: var(--green-dim); color: var(--green); border: 1px solid var(--green); }
+  .verdict-revise { background: var(--amber-dim); color: var(--amber); border: 1px solid var(--amber); }
+  .verdict-dnr    { background: var(--red-dim); color: var(--red); border: 1px solid var(--red); }
+  .score-detail { font-size: 12px; color: var(--text-muted); line-height: 1.8; }
+  .score-detail strong { color: var(--text); }
 
-/* ── Status bar ─────────────────────────────────────────────────────── */
-.status-bar {
-  font-family: var(--mono); font-size: 11px; color: var(--text3);
-  padding: 10px 18px; border-top: 0.5px solid var(--border);
-  display: flex; align-items: center; gap: 8px;
-}
-.status-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--text3); }
-.status-dot.active { background: var(--teal); animation: pulse 1.5s ease infinite; }
-@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.3} }
+  /* ── CONSENSUS WARNING ── */
+  .consensus-warn {
+    display: none;
+    background: var(--amber-dim);
+    border: 1px solid var(--amber);
+    padding: 14px 18px;
+    margin-bottom: 16px;
+  }
+  .consensus-warn.visible { display: flex; gap: 12px; align-items: flex-start; }
+  .warn-icon { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+  .warn-text { font-size: 12px; color: var(--amber); line-height: 1.6; }
+  .warn-text strong { display: block; margin-bottom: 2px; letter-spacing: 0.06em; }
+
+  /* ── PERSONA TABS ── */
+  .persona-tabs { margin-bottom: 16px; }
+  .tab-bar {
+    display: flex;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 0;
+  }
+  .tab-btn {
+    padding: 10px 20px;
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    background: none;
+    border: none;
+    border-bottom: 2px solid transparent;
+    cursor: pointer;
+    transition: all 0.15s;
+    margin-bottom: -1px;
+  }
+  .tab-btn:hover { color: var(--text); }
+  .tab-btn.active { color: var(--accent); border-bottom-color: var(--accent); }
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+
+  .persona-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-top: none;
+    padding: 24px;
+  }
+  .persona-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+  }
+  .persona-name {
+    font-family: var(--sans);
+    font-size: 14px;
+    font-weight: 700;
+  }
+  .persona-meta { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+  .persona-score {
+    font-family: var(--sans);
+    font-size: 28px;
+    font-weight: 800;
+    text-align: right;
+  }
+  .persona-verdict { font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; text-align: right; margin-top: 2px; }
+
+  /* Dimensions */
+  .dimensions { display: flex; flex-direction: column; gap: 14px; margin-bottom: 20px; }
+  .dim-row { display: flex; flex-direction: column; gap: 6px; }
+  .dim-header { display: flex; justify-content: space-between; align-items: baseline; }
+  .dim-name { font-size: 12px; color: var(--text-muted); }
+  .dim-score { font-family: var(--sans); font-size: 14px; font-weight: 700; }
+  .dim-bar-track {
+    height: 3px;
+    background: var(--surface-3);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .dim-bar-fill {
+    height: 100%;
+    border-radius: 2px;
+    transition: width 0.8s cubic-bezier(0.4,0,0.2,1);
+    width: 0%;
+  }
+  .dim-weight { font-size: 10px; color: var(--text-dim); letter-spacing: 0.06em; }
+
+  /* Critique */
+  .critique-block {
+    padding: 14px;
+    background: var(--surface-2);
+    border-left: 2px solid var(--accent);
+    font-size: 12px;
+    color: var(--text-muted);
+    line-height: 1.7;
+    font-style: italic;
+  }
+
+  /* ── HEATMAP ── */
+  .heatmap-panel {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 24px;
+    margin-bottom: 16px;
+    overflow-x: auto;
+  }
+  .heatmap-panel h3 {
+    font-family: var(--sans);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 18px;
+  }
+  .heatmap-table { width: 100%; border-collapse: collapse; }
+  .heatmap-table th {
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    padding: 6px 12px;
+    text-align: right;
+    border-bottom: 1px solid var(--border);
+  }
+  .heatmap-table th:first-child { text-align: left; }
+  .heatmap-table td {
+    padding: 8px 12px;
+    font-size: 12px;
+    border-bottom: 1px solid var(--border-soft);
+    text-align: right;
+  }
+  .heatmap-table td:first-child { text-align: left; color: var(--text-muted); }
+  .heatmap-table tr:last-child td { border-bottom: none; }
+  .cell-score {
+    display: inline-block;
+    padding: 3px 8px;
+    font-family: var(--sans);
+    font-weight: 700;
+    font-size: 12px;
+    min-width: 40px;
+    text-align: center;
+  }
+  .cell-high { background: var(--green-dim); color: var(--green); }
+  .cell-mid  { background: var(--amber-dim); color: var(--amber); }
+  .cell-low  { background: var(--red-dim);   color: var(--red); }
+
+  /* ── CALIBRATION NOTE ── */
+  .calibration-note {
+    padding: 14px 18px;
+    border: 1px solid var(--border);
+    background: var(--surface-2);
+    font-size: 11px;
+    color: var(--text-dim);
+    line-height: 1.7;
+    letter-spacing: 0.02em;
+  }
+  .calibration-note strong { color: var(--text-muted); }
+
+  /* ── ERROR ── */
+  .error-box {
+    display: none;
+    padding: 14px 18px;
+    background: var(--red-dim);
+    border: 1px solid var(--red);
+    color: var(--red);
+    font-size: 12px;
+    line-height: 1.6;
+    margin-bottom: 16px;
+  }
+  .error-box.visible { display: block; }
+
+  /* scrollbar */
+  ::-webkit-scrollbar { width: 4px; height: 4px; }
+  ::-webkit-scrollbar-track { background: var(--surface); }
+  ::-webkit-scrollbar-thumb { background: var(--border); }
 </style>
 </head>
 <body>
 <div class="shell">
 
-  <div class="top-bar">
-    <div class="wordmark">CCOS · <span>Creative Confidence</span> Operating System</div>
-    <div class="version-tag">bridge_v1 · social_static</div>
-  </div>
-
-  <div class="hero">
-    <p class="hero-eyebrow">AVC Creative OS · Scoring Engine</p>
-    <h1>Upload a creative.<br><strong>Get a confidence score.</strong></h1>
-    <p>Social Static proof of concept. Upload a Meta Feed, Instagram, or LinkedIn static creative and receive a CCS across four rubric dimensions, evaluated by three Synthetic Personas.</p>
-  </div>
-
-  <div class="cols">
-
-    <!-- LEFT: Input panel -->
-    <div>
-      <div class="panel" style="margin-bottom:16px">
-        <div class="panel-header">
-          <div class="panel-dot"></div>
-          <span class="panel-title">Creative asset</span>
-        </div>
-        <div class="panel-body">
-          <div id="upload-area">
-            <div class="upload-zone" id="drop-zone">
-              <input type="file" accept="image/*" id="file-input" onchange="handleFile(this.files[0])">
-              <div class="upload-icon">↑</div>
-              <p>Drop image or click to upload</p>
-              <small>JPG, PNG, WEBP · Max 5MB</small>
-            </div>
-          </div>
-          <div id="preview-area" style="display:none">
-            <div class="preview-wrap">
-              <img id="preview-img" src="" alt="Creative preview">
-              <button class="preview-clear" onclick="clearImage()" title="Remove">✕</button>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="panel" style="margin-bottom:16px">
-        <div class="panel-header">
-          <div class="panel-dot"></div>
-          <span class="panel-title">Campaign context</span>
-        </div>
-        <div class="panel-body">
-          <div class="field">
-            <label>Platform</label>
-            <select id="platform">
-              <option value="meta_feed">Meta Feed</option>
-              <option value="instagram_feed">Instagram Feed</option>
-              <option value="linkedin_feed">LinkedIn Feed</option>
-            </select>
-          </div>
-          <div class="field">
-            <label>Intent signal</label>
-            <select id="intent">
-              <option value="warm" selected>Warm — aware, considering</option>
-              <option value="hot">Hot — in-market, ready to buy</option>
-              <option value="cold">Cold — unaware, passive</option>
-            </select>
-          </div>
-          <div class="field">
-            <label>Caption copy (optional)</label>
-            <textarea id="caption" placeholder="Paste the post caption or ad copy here…"></textarea>
-          </div>
-          <div class="field">
-            <label>Brand voice</label>
-            <input type="text" id="brand-voice" value="Approachable and direct — outcome-led, avoids jargon" placeholder="Describe the brand voice…">
-          </div>
-        </div>
-      </div>
-
-      <div class="panel" style="margin-bottom:16px">
-        <div class="panel-header">
-          <div class="panel-dot" style="background:var(--purple)"></div>
-          <span class="panel-title">API key</span>
-        </div>
-        <div class="panel-body">
-          <div class="field" style="margin-bottom:0">
-            <label>Anthropic API key</label>
-            <div class="key-row">
-              <input type="password" id="api-key" placeholder="sk-ant-…" autocomplete="off">
-              <button class="key-toggle" onclick="toggleKey()">Show</button>
-            </div>
-            <div style="font-size:11px;color:var(--text3);margin-top:6px">
-              Key is used in-browser only. Never sent to any server except api.anthropic.com.
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <button class="run-btn" id="run-btn" onclick="runScoring()" disabled>
-        <span id="btn-label">Run CCOS evaluation</span>
-      </button>
+  <!-- HEADER -->
+  <header class="header">
+    <div class="header-left">
+      <div class="logo">AVC · Creative OS</div>
+      <h1>Creative Confidence<br>Scoring System</h1>
+      <div class="header-meta">CCOS Level 2 · Standalone Prototype · v6 · Phase 3 Complete</div>
     </div>
+    <div class="version-badge">12 Rubrics · 5 Platforms</div>
+  </header>
 
-    <!-- RIGHT: Results panel -->
-    <div class="panel" id="results-panel">
-      <div id="result-empty" class="result-empty">
-        <div class="idle-mark">◎</div>
-        <p>Upload a creative and run the evaluation.</p>
-        <p style="font-family:var(--mono);font-size:11px;color:var(--text3)">
-          3 personas · 4 dimensions · CCS output
-        </p>
+  <!-- CONFIG -->
+  <div class="section-label">01 · Format & Context</div>
+  <div class="config-panel">
+    <div class="config-grid">
+      <div class="field">
+        <label>Format</label>
+        <select id="formatSelect" onchange="onFormatChange()">
+          <optgroup label="YouTube">
+            <option value="youtube_longform">YouTube Long-Form</option>
+            <option value="youtube_shorts">YouTube Shorts</option>
+          </optgroup>
+          <optgroup label="Meta">
+            <option value="meta_feed_static">Meta Feed Static</option>
+            <option value="meta_reels">Meta Reels</option>
+          </optgroup>
+          <optgroup label="Instagram">
+            <option value="instagram_reels">Instagram Reels</option>
+            <option value="instagram_explore">Instagram Explore</option>
+            <option value="instagram_stories">Instagram Stories</option>
+          </optgroup>
+          <optgroup label="LinkedIn">
+            <option value="linkedin_organic">LinkedIn Organic</option>
+            <option value="linkedin_sponsored">LinkedIn Sponsored</option>
+          </optgroup>
+          <optgroup label="TikTok">
+            <option value="tiktok_organic">TikTok Organic (FYP)</option>
+            <option value="tiktok_ads">TikTok Ads</option>
+          </optgroup>
+          <optgroup label="Generic">
+            <option value="social_static">Social Static (Generic)</option>
+          </optgroup>
+        </select>
       </div>
-      <div id="result-content" style="display:none"></div>
-      <div class="status-bar">
-        <div class="status-dot" id="status-dot"></div>
-        <span id="status-text">Idle</span>
+      <div class="field">
+        <label>Intent Signal</label>
+        <select id="intentSelect">
+          <option value="Cold">Cold — Discovery / Awareness</option>
+          <option value="Warm">Warm — Consideration</option>
+          <option value="Hot">Hot — High Intent / Conversion</option>
+        </select>
       </div>
     </div>
-
+    <div id="formatDesc" class="format-desc"></div>
+    <div class="config-grid three">
+      <div class="field">
+        <label>Brand / Client</label>
+        <input type="text" id="brandName" placeholder="e.g. Acme Corp">
+      </div>
+      <div class="field">
+        <label>Campaign Objective</label>
+        <input type="text" id="objective" placeholder="e.g. Lead generation">
+      </div>
+      <div class="field">
+        <label>Target Audience</label>
+        <input type="text" id="audience" placeholder="e.g. B2B SaaS founders">
+      </div>
+    </div>
+    <div class="field">
+      <label>Asset Description <span style="color:var(--text-dim)">(describe the creative in detail)</span></label>
+      <textarea id="assetDesc" rows="4" placeholder="Describe the creative asset in detail: visual composition, copy, hook structure, audio (if applicable), CTA, format, and any notable creative choices. The more specific, the more accurate the scoring."></textarea>
+    </div>
   </div>
+
+  <!-- UPLOAD -->
+  <div class="section-label">02 · Creative Asset <span style="color:var(--text-dim)">(optional — static images only)</span></div>
+  <div class="upload-zone" id="uploadZone" onclick="document.getElementById('fileInput').click()">
+    <input type="file" id="fileInput" accept="image/jpeg,image/png,image/webp" onchange="onFileChange(event)" onclick="event.stopPropagation()">
+    <div class="upload-label" id="uploadLabel">
+      Drop image here or <span>click to upload</span><br>
+      <span style="font-size:11px;color:var(--text-dim)">JPG, PNG, WEBP · max 5MB</span>
+    </div>
+    <img id="previewImg" class="preview-img" style="display:none">
+  </div>
+  <div class="upload-caption" id="uploadCaption"></div>
+
+  <!-- PRE-GATE -->
+  <div id="pregatePanel" class="pregate-panel">
+    <div class="pregate-title">⚑ Pre-Scoring Gate — <span id="gateName"></span></div>
+    <div class="pregate-desc" id="gateDesc"></div>
+    <div class="gate-check">
+      <input type="checkbox" id="gatePass">
+      <label for="gatePass">I confirm this asset passes all gate requirements above</label>
+    </div>
+  </div>
+
+  <!-- API KEY -->
+  <div class="section-label">03 · API Key</div>
+  <div class="config-panel">
+    <div class="api-row">
+      <div class="field">
+        <label>Anthropic API Key <span style="color:var(--text-dim)">(sent directly to api.anthropic.com · never stored)</span></label>
+        <input type="password" id="apiKey" placeholder="sk-ant-...">
+      </div>
+    </div>
+  </div>
+
+  <!-- ERROR -->
+  <div id="errorBox" class="error-box"></div>
+
+  <!-- RUN BUTTON -->
+  <button class="run-btn" id="runBtn" onclick="runScoring()">
+    <div class="btn-inner">
+      <div class="spinner" id="spinner"></div>
+      <span id="btnText">Run CCOS Evaluation</span>
+    </div>
+  </button>
+
+  <!-- RESULTS -->
+  <div id="results">
+    <div class="results-header">
+      <h2>Evaluation Results</h2>
+      <div class="version-badge" id="resultsMeta"></div>
+    </div>
+
+    <!-- Score ring -->
+    <div class="score-block" id="scoreBlock">
+      <div class="ring-wrap">
+        <svg width="120" height="120" viewBox="0 0 120 120">
+          <circle class="ring-bg" cx="60" cy="60" r="52"/>
+          <circle class="ring-fill" id="ringFill" cx="60" cy="60" r="52"
+            stroke-dasharray="326.7" stroke-dashoffset="326.7"/>
+        </svg>
+        <div class="ring-text">
+          <div class="ring-score" id="ringScore">—</div>
+          <div class="ring-label">CCS</div>
+        </div>
+      </div>
+      <div class="score-meta">
+        <div class="verdict-badge" id="verdictBadge">—</div>
+        <div class="score-detail" id="scoreDetail"></div>
+      </div>
+    </div>
+
+    <!-- Consensus warning -->
+    <div class="consensus-warn" id="consensusWarn">
+      <div class="warn-icon">⚠</div>
+      <div class="warn-text">
+        <strong>Consensus Warning</strong>
+        All three personas returned different verdicts. This may indicate cross-surface performance inconsistency — the creative may work on one surface and fail on another. Do not smooth this signal. Surface it to the Signal Engineer before activation.
+      </div>
+    </div>
+
+    <!-- Persona tabs -->
+    <div class="persona-tabs">
+      <div class="tab-bar" id="tabBar"></div>
+      <div id="tabPanels"></div>
+    </div>
+
+    <!-- Heatmap -->
+    <div class="heatmap-panel" id="heatmapPanel">
+      <h3>Dimension Heatmap — All Personas</h3>
+      <table class="heatmap-table" id="heatmapTable"></table>
+    </div>
+
+    <!-- Calibration note -->
+    <div class="calibration-note">
+      <strong>Calibration reminder:</strong> These thresholds are MVP placeholders (70 / 55). They must be calibrated with real rejected assets from past campaigns in the Alpha session. Do not treat scores as absolute until the baseline is set.
+    </div>
+  </div>
+
 </div>
 
 <script>
-let imageData = null;
-let imageMediaType = 'image/jpeg';
-let currentPersona = 0;
-let scoringResults = null;
+// ─────────────────────────────────────────────────────────────────────────────
+// RUBRIC REGISTRY — v6, Phase 3 Complete
+// ─────────────────────────────────────────────────────────────────────────────
+const REGISTRY = {
+  social_static: {
+    label: "Social Static (Generic Feed)",
+    context: "A static image or carousel in a social media feed. Passive scroll. Must stop scroll, motivate save or share, and avoid aversion triggers.",
+    gate: null,
+    dimensions: [
+      { name: "Stop-scroll hierarchy", weight: 0.20 },
+      { name: "Text-to-image ratio", weight: 0.15 },
+      { name: "Native feel", weight: 0.20 },
+      { name: "Caption + CTA alignment", weight: 0.10 },
+      { name: "Aversion risk", weight: 0.20 },
+      { name: "Active engagement spurring", weight: 0.15 },
+    ]
+  },
+  youtube_longform: {
+    label: "YouTube Long-Form (>3 min)",
+    context: "Long-form video on YouTube. User arrives via Search, Browse, or Suggested. Thumbnail and first 30 seconds determine whether they stay.",
+    gate: { name: "Brand Safety & Advertiser Compliance", desc: "Fails on: borderline content, muted audio in in-stream ads, metadata not matching spoken content, non-compliant landing page." },
+    dimensions: [
+      { name: "Thumbnail strength", weight: 0.15 },
+      { name: "Opening hook retention (0–30s)", weight: 0.20 },
+      { name: "Watch time architecture", weight: 0.25 },
+      { name: "Contextual surface alignment", weight: 0.25 },
+      { name: "Intent-calibrated CTA & messaging", weight: 0.15 },
+    ]
+  },
+  youtube_shorts: {
+    label: "YouTube Shorts (≤60s)",
+    context: "Short-form vertical video in the YouTube Shorts feed. Passive scroll session. 0–2 seconds to establish hook before the swipe.",
+    gate: { name: "Platform Compliance", desc: "Fails on: external platform watermarks (TikTok, CapCut), duplicate/reused content, metadata spam, wrong aspect ratio (must be 9:16)." },
+    dimensions: [
+      { name: "Hook velocity (0–2s / VVSA)", weight: 0.30 },
+      { name: "Completion rate architecture", weight: 0.25 },
+      { name: "Platform nativeness & compliance", weight: 0.20 },
+      { name: "Contextual & sequential alignment", weight: 0.15 },
+      { name: "Intent-calibrated CTA", weight: 0.10 },
+    ]
+  },
+  meta_feed_static: {
+    label: "Meta Feed Static (Facebook + Instagram)",
+    context: "Static image or carousel in the Facebook or Instagram feed. Meta's vision models classify the creative at ingestion — before the auction. Demographic markers, visual stereotypes, and text density are read automatically.",
+    gate: { name: "Ad Auction Compliance", desc: "Fails on: policy-violating content, misleading claims, prohibited product categories, landing page mismatch with ad creative." },
+    dimensions: [
+      { name: "Visual classification safety", weight: 0.20 },
+      { name: "Stop-scroll hierarchy", weight: 0.20 },
+      { name: "Aversion risk", weight: 0.20 },
+      { name: "Active engagement spurring", weight: 0.15 },
+      { name: "Native feed integration", weight: 0.15 },
+      { name: "Intent-calibrated CTA", weight: 0.10 },
+    ]
+  },
+  meta_reels: {
+    label: "Meta Reels (Facebook + Instagram)",
+    context: "Short-form video in the Facebook or Instagram Reels feed. Passive scroll. Completion probability is the baseline ranking signal. Audio page navigation probability is a high-value proxy signal.",
+    gate: { name: "Ad Auction Compliance", desc: "Fails on: policy violations, misleading claims, prohibited categories, landing page mismatch." },
+    dimensions: [
+      { name: "Hook velocity (0–1.5s)", weight: 0.25 },
+      { name: "Audio-first design", weight: 0.20 },
+      { name: "Completion pull", weight: 0.20 },
+      { name: "Active engagement spurring", weight: 0.15 },
+      { name: "Native surface integration", weight: 0.10 },
+      { name: "Intent-calibrated CTA", weight: 0.10 },
+    ]
+  },
+  instagram_reels: {
+    label: "Instagram Reels (organic + paid)",
+    context: "Instagram Reels. Passive scroll. Governed by the Audition System: asset first served to a Stage 1 cohort of non-followers. Stage 1 bounce = suppression, no recovery. DM Sends (w=0.90) outrank Saves (w=0.85). Likes nearly irrelevant for discovery (w=0.30).",
+    gate: { name: "Instagram Recommendation Eligibility (4-layer)", desc: "1. Semantic compliance: no policy violations, violence, regulated substances.\n2. Technical: 9:16 aspect ratio, no letterboxing, audio present, high-res.\n3. Originality: no external watermarks, passes duplicate hash check.\n4. Account health: not under 30-day aggregator suppression (confirm with Signal Engineer)." },
+    dimensions: [
+      { name: "Audition hook velocity (0–3s)", weight: 0.30 },
+      { name: "DM send potential", weight: 0.20 },
+      { name: "Completion pull and rewatch architecture", weight: 0.20 },
+      { name: "Save and instructional value", weight: 0.15 },
+      { name: "Originality and transformativeness", weight: 0.10 },
+      { name: "Intent-calibrated CTA", weight: 0.05 },
+    ]
+  },
+  instagram_explore: {
+    label: "Instagram Explore",
+    context: "Instagram Explore. Active discovery mode — user seeking content from accounts they do NOT follow. Candidate generation uses co-occurrence interest graphs. First impression is a static ~110×110px thumbnail on a grid. Tap/no-tap decision in under 0.5s.",
+    gate: { name: "Instagram Recommendation Eligibility", desc: "Same 4-layer check as Instagram Reels. Additionally: thumbnail/cover image quality is the primary entry filter on the Explore grid." },
+    dimensions: [
+      { name: "Interest cluster fit", weight: 0.30 },
+      { name: "Save and instructional value", weight: 0.25 },
+      { name: "Thumbnail and cover image quality", weight: 0.20 },
+      { name: "DM send potential", weight: 0.15 },
+      { name: "Threaded comment depth potential", weight: 0.10 },
+    ]
+  },
+  instagram_stories: {
+    label: "Instagram Stories (organic brand)",
+    context: "Instagram Stories. High-intimacy, relationship-maintenance surface. Content from followed accounts. Intent state: relationship upkeep — NOT discovery. Unpolished, native, conversational formats outperform produced content.",
+    gate: { name: "Stories Basic Compliance", desc: "Lighter gate — shown to followers, not recommendation pools.\nFails on: policy violations, aspect ratio not 9:16, audio absent (if video), misinformation flags." },
+    dimensions: [
+      { name: "Relationship signal integration", weight: 0.30 },
+      { name: "Interactive element usage", weight: 0.25 },
+      { name: "Visual intimacy and authenticity", weight: 0.25 },
+      { name: "CTA naturalness", weight: 0.20 },
+    ]
+  },
+  linkedin_organic: {
+    label: "LinkedIn Organic Feed Post",
+    context: "LinkedIn organic feed. Professional context. ~70% of lifetime reach determined in first 60–90 minutes. Comments in first 5 min: 4.2× distribution multiplier. Author reply within 1 hour: +30–35% lifetime reach. Document carousels: 21.77% median engagement (3× video).",
+    gate: { name: "LinkedIn Organic Eligibility", desc: "1. Profile-content alignment: author profile must be semantically aligned with post topic (LLaMA 3 dual-encoder — manual check required).\n2. Zero external links in post body: 25–68% reach reduction — move links to first comment.\n3. Hashtag count 0–2: 3+ hashtags = 29% reach reduction.\n4. No coordinated activity: engagement pod participation = 60–90 day shadow ban." },
+    dimensions: [
+      { name: "Semantic sync and profile grounding", weight: 0.20 },
+      { name: "Attention hook and dwell architecture", weight: 0.25 },
+      { name: "Comment catalyst quality", weight: 0.20 },
+      { name: "Format and distribution hygiene", weight: 0.20 },
+      { name: "Intent state and sequence grounding", weight: 0.15 },
+    ]
+  },
+  linkedin_sponsored: {
+    label: "LinkedIn Sponsored Update (paid)",
+    context: "LinkedIn Sponsored Update. Real-time GSP auction governed by CADET (Context-Conditioned Ads Decoder-Only Transformer). Thought Leader Ads: 1.7× CTR, 1.6× engagement vs single-image. Broad audience definitions allow CADET to learn from sequential user histories.",
+    gate: { name: "Sponsored Update Compliance", desc: "1. Profile-content alignment: same as organic — author/brand profile must align with ad topic.\n2. Zero external links in ad body: same 25–68% reach penalty.\n3. Audience breadth: minimum 50,000+ estimated reach for CADET to learn effectively.\n4. CTA-objective alignment: CTA must match the campaign optimisation objective (social interactions vs landing page clicks)." },
+    dimensions: [
+      { name: "Semantic sync and profile grounding", weight: 0.20 },
+      { name: "Attention hook and dwell architecture", weight: 0.20 },
+      { name: "Thought Leader Ad format selection", weight: 0.25 },
+      { name: "CADET CTR optimisation", weight: 0.20 },
+      { name: "Intent-calibrated CTA alignment", weight: 0.15 },
+    ]
+  },
+  tiktok_organic: {
+    label: "TikTok Organic (FYP)",
+    context: "TikTok For You Page. Passive discovery. 3-phase pipeline: Recall → Predict → Sort. Cold-start: ~500 seed users in Basic Traffic Pool. Failure = suppression, no recovery. Engaging-form 60–180s now preferred over brevity. 3+ unrelated topics = 45% reach reduction.",
+    gate: { name: "TikTok FYP Eligibility", desc: "1. Content safety: no graphic medical, legally restricted, spam, or identical duplicates.\n2. Format: 9:16 vertical, no horizontal framing, no low resolution.\n3. Topical niche: asset must sit within 1–2 consistent topic clusters. 3+ unrelated topics = 45% reach reduction.\n4. Originality: no duplicate hash match." },
+    dimensions: [
+      { name: "Visual hook dynamics (0–3s)", weight: 0.25 },
+      { name: "Sustained narrative and value peaks", weight: 0.20 },
+      { name: "Acoustic-visual sync", weight: 0.15 },
+      { name: "Topical niche consistency", weight: 0.15 },
+      { name: "Share and loop engineering", weight: 0.15 },
+      { name: "Interactive engagement prompt", weight: 0.10 },
+    ]
+  },
+  tiktok_ads: {
+    label: "TikTok Ads (FYP + Search)",
+    context: "TikTok paid advertising. Two intent states: passive FYP (Observe-and-Expand broad targeting) and active Search (Deep Retrieval, 50+ keyword groups). Full-funnel: 4.3× more conversions, 36% more efficient CPA, 33% higher CVR vs single-objective.",
+    gate: { name: "TikTok Ads Compliance", desc: "All FYP Eligibility checks PLUS:\n1. Format: no horizontal framing, flipped orientations, low resolution, spelling errors, URL-formatted titles, still images <5s.\n2. Landing page: must be live, complete, no inescapable pop-ups.\n3. Campaign budget: MAI ≥50× CPA; AEO ≥20× CPA; VBO ≥10× CPA.\n4. Search Ads: keyword list ≥50 terms; budget-to-bid ratio ≥20:1." },
+    dimensions: [
+      { name: "Visual hook dynamics (0–3s)", weight: 0.25 },
+      { name: "Sustained narrative and value peaks", weight: 0.20 },
+      { name: "Acoustic-visual sync", weight: 0.15 },
+      { name: "Ad hygiene and format compliance", weight: 0.20 },
+      { name: "Campaign and audience architecture", weight: 0.20 },
+    ]
+  },
+};
 
-// ── File handling ────────────────────────────────────────────────────────────
-function handleFile(file) {
+// Default personas with surface context
+function getPersonas(formatId, intentSignal) {
+  const surfaceMap = {
+    youtube_longform: "YouTube Browse / Suggested (passive interest)",
+    youtube_shorts:   "YouTube Shorts feed (passive scroll)",
+    meta_feed_static: "Meta Feed — connected intent state (Home Feed)",
+    meta_reels:       "Meta Reels — unconnected discovery surface",
+    instagram_reels:  "Instagram Reels — passive scroll (Audition System)",
+    instagram_explore:"Instagram Explore — active discovery",
+    instagram_stories:"Instagram Stories — relationship maintenance",
+    linkedin_organic: "LinkedIn Feed — professional development intent",
+    linkedin_sponsored:"LinkedIn Feed — professional, paid placement",
+    tiktok_organic:   "TikTok FYP — passive discovery",
+    tiktok_ads:       "TikTok FYP + Search — passive and active intent",
+    social_static:    "Social media feed — passive scroll",
+  };
+  const surface = surfaceMap[formatId] || "Social media feed";
+  return [
+    { name: "High-Intent Converter", signal: "Hot",  surface: "Meta Feed (connected intent — Home Feed)", traits: ["Scans for price/value signals immediately","Will click if CTA is specific and low-friction","Dismisses vague brand messaging","Responsive to social proof and specificity"] },
+    { name: "Passive Discoverer",    signal: "Cold", surface,                                              traits: ["Scrolls quickly — stops only for strong visual/audio hooks","Saves content if useful or inspiring","Hostile to hard sell","Responds to native, UGC-style content"] },
+    { name: "Warm Considerer",       signal: "Warm", surface: "YouTube Browse / Suggested",               traits: ["Will watch 30–60s if the opening earns it","Compares against known alternatives","Responds to clear differentiation and social proof","Likely to share if genuinely useful"] },
+  ];
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// UI FUNCTIONS
+// ─────────────────────────────────────────────────────────────────────────────
+function onFormatChange() {
+  const fmt = document.getElementById('formatSelect').value;
+  const rubric = REGISTRY[fmt];
+  const descEl = document.getElementById('formatDesc');
+  const gatePanel = document.getElementById('pregatePanel');
+
+  descEl.textContent = rubric.context;
+  descEl.classList.add('visible');
+
+  if (rubric.gate) {
+    document.getElementById('gateName').textContent = rubric.gate.name;
+    document.getElementById('gateDesc').textContent = rubric.gate.desc;
+    document.getElementById('gatePass').checked = false;
+    gatePanel.classList.add('visible');
+  } else {
+    gatePanel.classList.remove('visible');
+  }
+}
+
+let imageBase64 = null;
+let imageMediaType = null;
+
+function onFileChange(e) {
+  const file = e.target.files[0];
   if (!file) return;
-  if (file.size > 5 * 1024 * 1024) { alert('Max file size is 5MB'); return; }
-  imageMediaType = file.type || 'image/jpeg';
+  if (file.size > 5 * 1024 * 1024) { showError('Image must be under 5MB.'); return; }
   const reader = new FileReader();
-  reader.onload = e => {
-    const b64full = e.target.result;
-    imageData = b64full.split(',')[1];
-    document.getElementById('preview-img').src = b64full;
-    document.getElementById('upload-area').style.display = 'none';
-    document.getElementById('preview-area').style.display = 'block';
-    checkRunnable();
+  reader.onload = ev => {
+    const dataUrl = ev.target.result;
+    imageBase64 = dataUrl.split(',')[1];
+    imageMediaType = file.type;
+    const preview = document.getElementById('previewImg');
+    preview.src = dataUrl;
+    preview.style.display = 'block';
+    document.getElementById('uploadLabel').style.display = 'none';
+    document.getElementById('uploadZone').classList.add('has-image');
+    document.getElementById('uploadCaption').textContent = `${file.name} · ${(file.size/1024).toFixed(0)}KB`;
   };
   reader.readAsDataURL(file);
 }
 
-function clearImage() {
-  imageData = null;
-  document.getElementById('file-input').value = '';
-  document.getElementById('preview-area').style.display = 'none';
-  document.getElementById('upload-area').style.display = 'block';
-  checkRunnable();
+function showError(msg) {
+  const el = document.getElementById('errorBox');
+  el.textContent = msg;
+  el.classList.add('visible');
+}
+function clearError() {
+  const el = document.getElementById('errorBox');
+  el.textContent = '';
+  el.classList.remove('visible');
 }
 
-function toggleKey() {
-  const inp = document.getElementById('api-key');
-  const btn = document.querySelector('.key-toggle');
-  inp.type = inp.type === 'password' ? 'text' : 'password';
-  btn.textContent = inp.type === 'password' ? 'Show' : 'Hide';
+function setLoading(on) {
+  const btn = document.getElementById('runBtn');
+  const spinner = document.getElementById('spinner');
+  const text = document.getElementById('btnText');
+  btn.disabled = on;
+  spinner.style.display = on ? 'block' : 'none';
+  text.textContent = on ? 'Evaluating...' : 'Run CCOS Evaluation';
 }
 
-document.getElementById('api-key').addEventListener('input', checkRunnable);
+// ─────────────────────────────────────────────────────────────────────────────
+// SCORING
+// ─────────────────────────────────────────────────────────────────────────────
+async function runScoring() {
+  clearError();
 
-function checkRunnable() {
-  const hasImage = !!imageData;
-  const hasKey   = document.getElementById('api-key').value.trim().startsWith('sk-ant');
-  document.getElementById('run-btn').disabled = !(hasImage && hasKey);
+  const fmt = document.getElementById('formatSelect').value;
+  const rubric = REGISTRY[fmt];
+  const intent = document.getElementById('intentSelect').value;
+  const brand = document.getElementById('brandName').value.trim();
+  const objective = document.getElementById('objective').value.trim();
+  const audience = document.getElementById('audience').value.trim();
+  const desc = document.getElementById('assetDesc').value.trim();
+  const apiKey = document.getElementById('apiKey').value.trim();
+
+  if (!desc) { showError('Please provide an asset description.'); return; }
+  if (!apiKey) { showError('Please enter your Anthropic API key.'); return; }
+
+  if (rubric.gate) {
+    const gateEl = document.getElementById('gatePass');
+    if (!gateEl.checked) { showError(`Pre-scoring gate check required: confirm the asset passes the "${rubric.gate.name}" gate before scoring.`); return; }
+  }
+
+  setLoading(true);
+  document.getElementById('results').classList.remove('visible');
+
+  const personas = getPersonas(fmt, intent);
+  const results = [];
+
+  try {
+    for (const persona of personas) {
+      const prompt = buildPrompt(rubric, persona, desc, brand, objective, audience, intent, fmt);
+      const msgContent = [];
+      if (imageBase64 && imageMediaType) {
+        msgContent.push({ type: 'image', source: { type: 'base64', media_type: imageMediaType, data: imageBase64 } });
+      }
+      msgContent.push({ type: 'text', text: prompt });
+
+      const resp = await fetch('https://api.anthropic.com/v1/messages', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-api-key': apiKey,
+          'anthropic-version': '2023-06-01',
+          'anthropic-dangerous-direct-browser-access': 'true',
+        },
+        body: JSON.stringify({
+          model: 'claude-sonnet-4-20250514',
+          max_tokens: 1200,
+          messages: [{ role: 'user', content: msgContent }],
+        })
+      });
+
+      if (!resp.ok) {
+        const err = await resp.json().catch(() => ({}));
+        throw new Error(err?.error?.message || `API error ${resp.status}`);
+      }
+
+      const data = await resp.json();
+      const raw = data.content.map(b => b.text || '').join('').replace(/```json|```/g, '').trim();
+      const parsed = JSON.parse(raw);
+      results.push(parsed);
+    }
+
+    renderResults(results, rubric, fmt, intent);
+  } catch(e) {
+    showError(`Error: ${e.message}`);
+  } finally {
+    setLoading(false);
+  }
 }
 
-// Drag and drop
-const dz = document.getElementById('drop-zone');
-dz.addEventListener('dragover', e => { e.preventDefault(); dz.classList.add('drag'); });
-dz.addEventListener('dragleave', () => dz.classList.remove('drag'));
-dz.addEventListener('drop', e => { e.preventDefault(); dz.classList.remove('drag'); handleFile(e.dataTransfer.files[0]); });
-
-// ── Rubric ───────────────────────────────────────────────────────────────────
-const RUBRIC = {
-  format_name: 'Social Static',
-  dimensions: [
-    { id: 'stop_scroll_hierarchy', name: 'Stop-scroll hierarchy', weight: 0.35,
-      guide: 'Does the creative have a single dominant visual that commands attention within 1.5 seconds? Is there clear visual hierarchy (hero → supporting → CTA)? Does it differentiate from generic category creative? 100=instantly arresting. 50=visible but forgettable. 0=chaotic or invisible.' },
-    { id: 'text_image_ratio', name: 'Text-to-image ratio', weight: 0.20,
-      guide: 'Is the text-to-image ratio appropriate for the platform? Is on-image text legible at mobile size? Does text placement respect safe zones? 100=perfect balance. 50=readable but crowded. 0=text-heavy or safe-zone violation.' },
-    { id: 'native_feel', name: 'Platform nativeness', weight: 0.25,
-      guide: 'Does the creative feel native to the platform or imported from another context? Does the aspect ratio, composition, and tone match platform norms? 100=indistinguishable from organic content. 50=clearly an ad. 0=obviously imported.' },
-    { id: 'caption_cta_alignment', name: 'Caption & CTA alignment', weight: 0.20,
-      guide: 'Is the CTA calibrated to the intent signal? (Hot=transactional, Warm=inviting, Cold=curious). Is copy specific and outcome-led? 100=precisely calibrated. 50=functional but generic. 0=wrong intent register.' }
-  ]
-};
-
-const PERSONAS = [
-  { intent: 'hot',  label: 'HOT',
-    profile: 'In-market, active purchase intent. Ready to buy. Fast scroll, scanning for reason to stop. Responds to: specific, proven, ships today. Alienated by: journey, curated, elevate. Rejects pressure tactics. Wants transactional CTA.' },
-  { intent: 'warm', label: 'WARM',
-    profile: 'Aware, actively considering. Medium scroll speed. Responds to clear outcomes, brand differentiation, specific benefits. Alienated by hard sell and urgency. Wants inviting low-pressure CTA.' },
-  { intent: 'cold', label: 'COLD',
-    profile: 'Unaware or passively adjacent. Fast scroll, low tolerance for ads. Pauses for visual distinction, cultural relevance, curiosity. Alienated by anything that feels like advertising. Rejects all transactional language.' }
-];
-
-// ── API call ─────────────────────────────────────────────────────────────────
-async function scorePersona(persona, apiKey, platform, intent, brandVoice, caption) {
-  const dimBlock = RUBRIC.dimensions.map((d, i) =>
-    `DIMENSION ${i+1}: ${d.name}\n${d.guide}`
+function buildPrompt(rubric, persona, assetDesc, brand, objective, audience, intent, formatId) {
+  const dimList = rubric.dimensions.map(d =>
+    `### ${d.name} (weight: ${Math.round(d.weight*100)}%)\nScore this dimension from 0–100 based on the rubric for ${rubric.label}.`
   ).join('\n\n');
 
-  const captionBlock = caption ? `\nCaption copy to evaluate:\n"${caption}"\n` : '';
+  return `You are evaluating a creative asset as the following synthetic persona.
 
-  const prompt = `You are evaluating a social media creative for the CCOS scoring engine.
+## Your Persona
+Name: ${persona.name}
+Intent signal: ${persona.signal}
+Surface context: ${persona.surface}
+Behavioural traits:
+${persona.traits.map(t => `- ${t}`).join('\n')}
 
-PERSONA PROFILE (evaluate from this perspective — you are this person, not a marketer):
-Intent signal: ${persona.intent.toUpperCase()}
-${persona.profile}
+## Platform Context
+${rubric.context}
 
-CONTEXT
-Platform: ${platform.replace('_',' ')}
-Campaign intent signal: ${intent.toUpperCase()}
-Brand voice: ${brandVoice}
-The creative appears in a social feed. The viewer scrolls at speed and has ~1.5 seconds to be stopped.
-${captionBlock}
-SCORING RUBRIC — score each dimension 0–100:
-${dimBlock}
+## Asset Details
+Format: ${rubric.label}
+Intent signal: ${intent}
+Brand: ${brand || 'Not specified'}
+Campaign objective: ${objective || 'Not specified'}
+Target audience: ${audience || 'Not specified'}
 
-INSTRUCTIONS
-Evaluate the image from this persona's perspective. Score each dimension independently.
-Write a specific 1-sentence critique per dimension.
-Write a 2-sentence overall assessment from this persona's viewpoint.
-State verdict: launch_ready (weighted ≥70) | needs_revision (55–69) | do_not_run (<55)
+## Asset Description
+${assetDesc}
 
-Return ONLY valid JSON with no preamble or markdown:
-{"persona_intent":"${persona.intent}","dimension_scores":{"stop_scroll_hierarchy":{"score":0,"critique":""},"text_image_ratio":{"score":0,"critique":""},"native_feel":{"score":0,"critique":""},"caption_cta_alignment":{"score":0,"critique":""}},"overall_assessment":"","verdict":"needs_revision"}`;
+## Your Task
+Score the asset on each dimension from 0–100 from YOUR persona's perspective. Be specific and critical. Then compute the weighted CCS.
 
-  const res = await fetch('https://api.anthropic.com/v1/messages', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'x-api-key': apiKey,
-      'anthropic-version': '2023-06-01',
-      'anthropic-dangerous-direct-browser-access': 'true'
-    },
-    body: JSON.stringify({
-      model: 'claude-sonnet-4-20250514',
-      max_tokens: 1000,
-      messages: [{
-        role: 'user',
-        content: [
-          { type: 'image', source: { type: 'base64', media_type: imageMediaType, data: imageData } },
-          { type: 'text', text: prompt }
-        ]
-      }]
-    })
-  });
+${dimList}
 
-  if (!res.ok) {
-    const err = await res.json();
-    throw new Error(err.error?.message || `API error ${res.status}`);
-  }
+## Weighted CCS Formula
+CCS = ${rubric.dimensions.map(d => `(${d.name} × ${d.weight})`).join(' + ')}
 
-  const data = await res.json();
-  let text = data.content[0].text.trim();
-  text = text.replace(/^```json\s*|^```\s*|```$/gm, '').trim();
-  const parsed = JSON.parse(text);
-
-  // Compute weighted score
-  let weighted = 0;
-  RUBRIC.dimensions.forEach(d => {
-    const s = parsed.dimension_scores?.[d.id]?.score || 0;
-    weighted += s * d.weight;
-  });
-  parsed._weighted = Math.round(weighted * 10) / 10;
-  return parsed;
+## Response Format (JSON ONLY — no preamble, no markdown fences)
+{
+  "persona": "${persona.name}",
+  "dimension_scores": {${rubric.dimensions.map(d => `"${d.name}": <0-100>`).join(', ')}},
+  "ccs": <weighted_composite_0_to_100>,
+  "verdict": "launch-ready" or "needs-revision" or "do-not-run",
+  "critique": "<2–3 sentences of specific critique from this persona's perspective>"
+}`;
 }
 
-// ── Scoring orchestration ────────────────────────────────────────────────────
-async function runScoring() {
-  const apiKey = document.getElementById('api-key').value.trim();
-  const platform = document.getElementById('platform').value;
-  const intent = document.getElementById('intent').value;
-  const caption = document.getElementById('caption').value.trim();
-  const brandVoice = document.getElementById('brand-voice').value.trim();
+// ─────────────────────────────────────────────────────────────────────────────
+// RENDER
+// ─────────────────────────────────────────────────────────────────────────────
+function renderResults(results, rubric, formatId, intent) {
+  const scores = results.map(r => r.ccs);
+  const mean = scores.reduce((a,b) => a+b, 0) / scores.length;
+  const verdicts = results.map(r => r.verdict);
+  const uniqueVerdicts = new Set(verdicts);
+  const consensusWarning = uniqueVerdicts.size === 3;
 
-  setStatus('active', 'Running evaluation…');
-  setRunning(true);
+  let finalVerdict = mean >= 70 ? 'launch-ready' : mean >= 55 ? 'needs-revision' : 'do-not-run';
 
-  document.getElementById('result-empty').style.display = 'none';
-  document.getElementById('result-content').style.display = 'block';
-  document.getElementById('result-content').innerHTML = renderSkeleton();
+  // Ring
+  const ringFill = document.getElementById('ringFill');
+  const circumference = 326.7;
+  const offset = circumference - (mean / 100) * circumference;
+  const color = mean >= 70 ? 'var(--green)' : mean >= 55 ? 'var(--amber)' : 'var(--red)';
+  ringFill.style.stroke = color;
+  setTimeout(() => { ringFill.style.strokeDashoffset = offset; }, 100);
 
-  const results = [];
-  for (let i = 0; i < PERSONAS.length; i++) {
-    setStatus('active', `Scoring ${PERSONAS[i].label} persona (${i+1}/3)…`);
-    try {
-      const r = await scorePersona(PERSONAS[i], apiKey, platform, intent, brandVoice, caption);
-      results.push(r);
-    } catch (e) {
-      setRunning(false);
-      setStatus('', `Error: ${e.message}`);
-      document.getElementById('result-content').innerHTML = `<div style="padding:24px;color:var(--red);font-size:13px">Error: ${e.message}</div>`;
-      return;
-    }
-  }
+  document.getElementById('ringScore').textContent = Math.round(mean);
+  document.getElementById('ringScore').style.color = color;
 
-  scoringResults = results;
-  const ccs = Math.round((results.reduce((a, r) => a + r._weighted, 0) / results.length) * 10) / 10;
-  const consensus = checkConsensus(results);
+  // Verdict badge
+  const badge = document.getElementById('verdictBadge');
+  badge.textContent = finalVerdict.replace('-', ' ').toUpperCase();
+  badge.className = 'verdict-badge';
+  badge.classList.add(finalVerdict === 'launch-ready' ? 'verdict-launch' : finalVerdict === 'needs-revision' ? 'verdict-revise' : 'verdict-dnr');
 
-  document.getElementById('result-content').innerHTML = renderResults(results, ccs, consensus, platform, intent);
-  currentPersona = 0;
-  showPersona(0);
-  setRunning(false);
-  setStatus('', `CCS: ${ccs} · ${getThresholdLabel(ccs).label}`);
-}
+  // Score detail
+  document.getElementById('scoreDetail').innerHTML = `
+    <strong>Score range:</strong> ${Math.min(...scores).toFixed(1)} – ${Math.max(...scores).toFixed(1)} across personas<br>
+    <strong>Format:</strong> ${rubric.label}<br>
+    <strong>Intent:</strong> ${intent}
+  `;
 
-function checkConsensus(results) {
-  const verdictMap = { launch_ready: 2, needs_revision: 1, do_not_run: 0 };
-  const verdicts = results.map(r => verdictMap[r.verdict] ?? 1);
-  const scores = results.map(r => r._weighted);
-  const avg = scores.reduce((a,b)=>a+b,0) / scores.length;
-  const std = Math.sqrt(scores.reduce((a,s)=>a+(s-avg)**2,0)/scores.length);
-  const range = Math.max(...verdicts) - Math.min(...verdicts);
-  return {
-    warning: range >= 2 || std > 12,
-    std: Math.round(std*10)/10,
-    range,
-    verdicts: results.map(r => r.verdict)
-  };
-}
+  // Results meta
+  document.getElementById('resultsMeta').textContent = `v6 · ${new Date().toLocaleTimeString()}`;
 
-function getThresholdLabel(ccs) {
-  if (ccs >= 70) return { label: 'Launch-ready', action: 'Proceed to activation', color: 'var(--teal)' };
-  if (ccs >= 55) return { label: 'Needs revision', action: 'Return with critique', color: 'var(--amber)' };
-  return { label: 'Do not run', action: 'Rebuild', color: 'var(--red)' };
-}
+  // Consensus
+  document.getElementById('consensusWarn').classList.toggle('visible', consensusWarning);
 
-function getVerdictStyle(verdict) {
-  const map = {
-    launch_ready:   { bg: 'var(--teal-bg)',   color: 'var(--teal)',  border: 'rgba(45,214,160,.2)' },
-    needs_revision: { bg: 'var(--amber-bg)',  color: 'var(--amber)', border: 'rgba(232,169,53,.2)' },
-    do_not_run:     { bg: 'var(--red-bg)',    color: 'var(--red)',   border: 'rgba(224,85,85,.2)' }
-  };
-  return map[verdict] || map.needs_revision;
-}
-
-// ── Render ───────────────────────────────────────────────────────────────────
-function renderSkeleton() {
-  return `<div style="padding:24px;display:flex;flex-direction:column;gap:12px">
-    ${[1,2,3].map(()=>`<div style="height:60px;background:var(--bg3);border-radius:8px;animation:pulse 1.5s ease infinite"></div>`).join('')}
-  </div>`;
-}
-
-function renderResults(results, ccs, consensus, platform, intent) {
-  const th = getThresholdLabel(ccs);
-  const circ = 2 * Math.PI * 36;
-  const fill = circ * (ccs / 100);
-
-  let html = `
-  <div class="score-hero">
-    <div class="ring-wrap">
-      <svg width="88" height="88" viewBox="0 0 88 88">
-        <circle cx="44" cy="44" r="36" fill="none" stroke="var(--bg4)" stroke-width="7"/>
-        <circle cx="44" cy="44" r="36" fill="none" stroke="${th.color}" stroke-width="7"
-          stroke-dasharray="${fill.toFixed(1)} ${circ.toFixed(1)}" stroke-linecap="round"/>
-      </svg>
-      <div class="ring-center">
-        <span class="ring-num" style="color:${th.color}">${ccs}</span>
-        <span class="ring-denom">/100</span>
-      </div>
-    </div>
-    <div class="score-meta">
-      <div class="score-label" style="color:${th.color}">${th.label}</div>
-      <div class="score-action">${th.action}</div>
-      <div class="score-tags">
-        <span class="tag tag-platform">${platform.replace('_',' ')}</span>
-        <span class="tag tag-intent">${intent}</span>
-        ${consensus.warning ? '<span class="tag tag-warn">⚠ consensus warning</span>' : ''}
-      </div>
-    </div>
-  </div>`;
-
-  if (consensus.warning) {
-    html += `
-  <div class="consensus-warn" style="margin:14px 18px 0">
-    <div>⚠</div>
-    <div>
-      <strong>Consensus Warning active</strong>
-      Personas produced significantly divergent verdicts — ${consensus.verdicts.join(' · ')}.
-      Score std dev: ${consensus.std}. Review per-persona critiques before any activation decision.
-    </div>
-  </div>`;
-  }
-
-  html += `
-  <div class="persona-tabs" style="margin-top:14px">
-    ${PERSONAS.map((p,i) => {
-      const r = results[i];
-      const vs = getVerdictStyle(r?.verdict);
-      return `<div class="ptab" id="ptab-${i}" onclick="showPersona(${i})" style="--pcolor:${vs.color}">
-        ${p.label} <span style="font-size:10px;color:${vs.color};margin-left:4px">${r?._weighted||'—'}</span>
-      </div>`;
-    }).join('')}
-  </div>`;
+  // Persona tabs
+  const tabBar = document.getElementById('tabBar');
+  const tabPanels = document.getElementById('tabPanels');
+  tabBar.innerHTML = '';
+  tabPanels.innerHTML = '';
 
   results.forEach((r, i) => {
-    const vs = getVerdictStyle(r.verdict);
-    html += `
-  <div class="persona-result" id="presult-${i}">
-    <div class="verdict-row">
-      <span class="verdict-badge" style="background:${vs.bg};color:${vs.color};border:0.5px solid ${vs.border}">
-        ${r.verdict.replace('_',' ')}
-      </span>
-      <span class="verdict-score" style="color:${vs.color}">${r._weighted}</span>
-    </div>`;
+    const btn = document.createElement('button');
+    btn.className = 'tab-btn' + (i === 0 ? ' active' : '');
+    btn.textContent = r.persona;
+    btn.onclick = () => switchTab(i, results.length);
+    tabBar.appendChild(btn);
 
-    RUBRIC.dimensions.forEach(d => {
-      const entry = r.dimension_scores?.[d.id] || {};
-      const score = entry.score || 0;
-      const color = score >= 70 ? 'var(--teal)' : score >= 55 ? 'var(--amber)' : 'var(--red)';
-      html += `
-    <div class="dim-block">
-      <div class="dim-head">
-        <span class="dim-name-txt">${d.name}</span>
-        <span class="dim-score-txt" style="color:${color}">${score}</span>
-      </div>
-      <div class="dim-track">
-        <div class="dim-fill-bar" style="width:${score}%;background:${color}"></div>
-      </div>
-      <div class="dim-critique">${entry.critique || ''}</div>
-    </div>`;
-    });
+    const panel = document.createElement('div');
+    panel.className = 'tab-panel' + (i === 0 ? ' active' : '');
+    panel.id = `tab-${i}`;
 
-    html += `
-    <div class="assessment-box">${r.overall_assessment || ''}</div>
-  </div>`;
+    const pColor = r.ccs >= 70 ? 'var(--green)' : r.ccs >= 55 ? 'var(--amber)' : 'var(--red)';
+    const dims = rubric.dimensions.map(d => {
+      const s = r.dimension_scores[d.name] ?? 0;
+      const barColor = s >= 70 ? 'var(--green)' : s >= 50 ? 'var(--amber)' : 'var(--red)';
+      return `<div class="dim-row">
+        <div class="dim-header">
+          <span class="dim-name">${d.name}</span>
+          <span style="display:flex;gap:12px;align-items:baseline">
+            <span class="dim-weight">${Math.round(d.weight*100)}%</span>
+            <span class="dim-score" style="color:${barColor}">${s}</span>
+          </span>
+        </div>
+        <div class="dim-bar-track"><div class="dim-bar-fill" style="width:${s}%;background:${barColor}"></div></div>
+      </div>`;
+    }).join('');
+
+    const personas = getPersonas(formatId, '');
+    const p = personas[i];
+
+    panel.innerHTML = `<div class="persona-card">
+      <div class="persona-header">
+        <div>
+          <div class="persona-name">${r.persona}</div>
+          <div class="persona-meta">${p.signal} intent · ${p.surface}</div>
+        </div>
+        <div>
+          <div class="persona-score" style="color:${pColor}">${Math.round(r.ccs)}</div>
+          <div class="persona-verdict" style="color:${pColor}">${r.verdict.replace('-',' ').toUpperCase()}</div>
+        </div>
+      </div>
+      <div class="dimensions">${dims}</div>
+      <div class="critique-block">${r.critique}</div>
+    </div>`;
+    tabPanels.appendChild(panel);
   });
 
   // Heatmap
-  html += `
-  <div class="heatmap-wrap">
-    <div class="heatmap-label">Dimension heatmap</div>
-    <table>
-      <tr><th>Dimension</th><th>Weight</th>${PERSONAS.map(p=>`<th>${p.label}</th>`).join('')}<th>Avg</th></tr>`;
+  const table = document.getElementById('heatmapTable');
+  const personas = getPersonas(formatId, '');
+  const pNames = results.map(r => r.persona.split(' ')[0]);
+  table.innerHTML = `<tr>
+    <th>Dimension</th>
+    <th>Wt</th>
+    ${pNames.map(n => `<th>${n}</th>`).join('')}
+    <th>Avg</th>
+  </tr>` + rubric.dimensions.map(d => {
+    const dimScores = results.map(r => r.dimension_scores[d.name] ?? 0);
+    const avg = dimScores.reduce((a,b)=>a+b,0)/dimScores.length;
+    const cells = dimScores.map(s => `<td><span class="cell-score ${s>=70?'cell-high':s>=50?'cell-mid':'cell-low'}">${s}</span></td>`).join('');
+    return `<tr>
+      <td>${d.name}</td>
+      <td style="color:var(--text-dim);font-size:11px">${Math.round(d.weight*100)}%</td>
+      ${cells}
+      <td><span class="cell-score ${avg>=70?'cell-high':avg>=50?'cell-mid':'cell-low'}">${avg.toFixed(0)}</span></td>
+    </tr>`;
+  }).join('') + `<tr style="border-top:1px solid var(--border)">
+    <td style="font-family:var(--sans);font-weight:700;color:var(--text)">CCS</td>
+    <td></td>
+    ${results.map(r => `<td><span class="cell-score ${r.ccs>=70?'cell-high':r.ccs>=55?'cell-mid':'cell-low'}" style="font-family:var(--sans);font-weight:700">${Math.round(r.ccs)}</span></td>`).join('')}
+    <td><span class="cell-score ${mean>=70?'cell-high':mean>=55?'cell-mid':'cell-low'}" style="font-family:var(--sans);font-weight:700">${Math.round(mean)}</span></td>
+  </tr>`;
 
-  RUBRIC.dimensions.forEach(d => {
-    const scores = results.map(r => r.dimension_scores?.[d.id]?.score || 0);
-    const avg = Math.round(scores.reduce((a,b)=>a+b,0) / scores.length);
-    html += `<tr><td>${d.name}</td><td style="color:var(--text3);font-family:var(--mono)">${Math.round(d.weight*100)}%</td>`;
-    scores.forEach(s => {
-      const cls = s >= 70 ? 'score-hi' : s >= 55 ? 'score-mid' : 'score-lo';
-      html += `<td class="cell-score ${cls}">${s}</td>`;
-    });
-    const avgcls = avg >= 70 ? 'score-hi' : avg >= 55 ? 'score-mid' : 'score-lo';
-    html += `<td class="cell-score ${avgcls}" style="font-weight:600">${avg}</td></tr>`;
+  document.getElementById('results').classList.add('visible');
+  document.getElementById('results').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function switchTab(idx, total) {
+  for (let i = 0; i < total; i++) {
+    document.querySelectorAll('.tab-btn')[i].classList.toggle('active', i === idx);
+    document.getElementById(`tab-${i}`).classList.toggle('active', i === idx);
+  }
+}
+
+// Init on load
+document.addEventListener('DOMContentLoaded', () => {
+  onFormatChange();
+  // Animate dimension bars after tab switch
+  document.getElementById('tabBar').addEventListener('click', () => {
+    setTimeout(() => {
+      document.querySelectorAll('.dim-bar-fill').forEach(el => {
+        const w = el.style.width;
+        el.style.width = '0%';
+        setTimeout(() => { el.style.width = w; }, 50);
+      });
+    }, 10);
   });
-
-  const th2 = getThresholdLabel(ccs);
-  html += `<tr class="total-row"><td>CCS (weighted avg)</td><td></td>`;
-  results.forEach(r => {
-    html += `<td class="cell-score" style="color:${th2.color}">${r._weighted}</td>`;
-  });
-  html += `<td class="cell-score" style="color:${th2.color};font-size:15px">${ccs}</td></tr>`;
-  html += `</table></div>`;
-
-  return html;
-}
-
-function showPersona(idx) {
-  document.querySelectorAll('.ptab').forEach((t,i) => t.classList.toggle('active', i===idx));
-  document.querySelectorAll('.persona-result').forEach((p,i) => p.classList.toggle('active', i===idx));
-  currentPersona = idx;
-}
-
-function setRunning(running) {
-  const btn = document.getElementById('run-btn');
-  const label = document.getElementById('btn-label');
-  btn.disabled = running;
-  label.innerHTML = running
-    ? '<div class="spinner"></div> Evaluating…'
-    : 'Run CCOS evaluation';
-}
-
-function setStatus(state, text) {
-  document.getElementById('status-dot').className = 'status-dot' + (state === 'active' ? ' active' : '');
-  document.getElementById('status-text').textContent = text;
-}
+});
 </script>
 </body>
 </html>
